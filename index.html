@@ -601,7 +601,7 @@ async function onRing(e){
 
 async function loadToken(){
   token = await kvGet("ghToken").catch(() => null);
-  $("fab").hidden = !token;
+  $("fab").hidden = false;
   $("addsec").hidden = !token || $("plan").hidden;
   $("tok-remove").hidden = !token;
   kvGet("timerOk").then(v => { $("timer-status").textContent = v === true ? L("Focus alerts: on.", "집중 알림: 켜짐") : v === false ? L("Focus alerts: off. Add career-tracker-timer to this token to get a notification when a focus session ends.", "집중 알림: 꺼짐. 이 토큰에 career-tracker-timer 저장소를 추가하면 집중이 끝날 때 알림이 와요.") : ""; }).catch(() => {});
@@ -624,7 +624,7 @@ $("addcard").addEventListener("submit", async ev => {
 
 /* tell claude */
 let rec = null;
-function openSheet(){ $("sheet").hidden = false; setTimeout(() => $("say").focus(), 50); }
+function openSheet(){ $("sheet").hidden = false; if (!token) { $("sheet-note").textContent = L("To send this to Claude, save your GitHub token in Settings → Editing first.", "Claude에게 보내려면 먼저 설정 → Editing에 GitHub 토큰을 저장해 주세요."); $("say-send").textContent = L("Open Settings", "설정 열기"); } else { $("say-send").textContent = L("Send to Claude", "Claude에게 보내기"); } setTimeout(() => $("say").focus(), 50); }
 function closeSheet(){ if (rec) { try { rec.stop(); } catch (_) {} } $("sheet").hidden = true; }
 $("fab").addEventListener("click", openSheet);
 $("say-cancel").addEventListener("click", closeSheet);
@@ -642,8 +642,10 @@ $("mic").addEventListener("click", () => {
   $("mic").classList.add("on"); rec.start();
 });
 $("say-send").addEventListener("click", async () => {
-  const text = $("say").value.trim(); if (!text) return;
-  if (!token) { toast(L("Turn on editing in Settings first.", "먼저 설정에서 편집을 켜 주세요.")); return; }
+  const text = $("say").value.trim();
+  if (!token) { closeSheet(); setTab("set"); return; }
+  if (!text) return;
+  if (!token) { closeSheet(); setTab("set"); return; }
   $("say").value = ""; closeSheet();
   const hr = new Date().getHours(); const next = [10,12,14,16,18,20,22].find(x => x > hr);
   const when = next ? L("by " + ((next % 12) || 12) + ":13 " + (next < 12 ? "AM" : "PM"), (next < 12 ? "오전 " : "오후 ") + ((next % 12) || 12) + ":13까지") : L("in the morning brief", "아침 브리핑 때");
