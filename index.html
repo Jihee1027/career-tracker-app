@@ -9,15 +9,18 @@
 <link rel="icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Tracker">
-<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap">
+<meta name="theme-color" content="#EAF1F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#081418" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
-:root{--bg:#F2F2F7;--group:#FFFFFF;--ink:#111418;--sub:#6C7480;--sep:rgba(60,60,67,.16);--fill:rgba(118,118,128,.12);
---accent:#0E6B8A;--accent-ink:#FFFFFF;--red:#D7372B;--orange:#B86200;--green:#2E7D46;
+:root{--bg:#EAF1F2;--group:#FFFFFF;--ink:#0D2A33;--sub:#5E737A;--sep:rgba(13,42,51,.12);--fill:rgba(14,107,138,.08);
+--accent:#0E6B8A;--accent-ink:#FFFFFF;--coral:#F26B3A;--red:#D9442B;--orange:#B85E00;--green:#2E7D46;
+--hero1:#138099;--hero2:#0A4E63;--display:"Bricolage Grotesque",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 --c-interview:#0E7FA8;--c-offer:#7B54C0;--c-school:#2E8B4A;--c-admin:#C26A12;--c-other:#8A939E}
-@media (prefers-color-scheme: dark){:root{--bg:#000000;--group:#1C1C1E;--ink:#F2F2F7;--sub:#9A9FA8;--sep:rgba(84,84,88,.55);--fill:rgba(118,118,128,.24);
---accent:#5BB8D6;--accent-ink:#04202A;--red:#FF6B5E;--orange:#FFB340;--green:#5FD38A;
+@media (prefers-color-scheme: dark){:root{--bg:#081418;--group:#10232A;--ink:#E8F2F4;--sub:#8FA8AF;--sep:rgba(143,168,175,.18);--fill:rgba(91,184,214,.12);
+--accent:#5BC0DE;--accent-ink:#04202A;--coral:#FF8A5C;--red:#FF6B57;--orange:#FFB54A;--green:#5FD38A;--hero1:#16708A;--hero2:#0B3C4C;
 --c-interview:#5BC3E6;--c-offer:#BFA2F0;--c-school:#73D08E;--c-admin:#F0AC5E;--c-other:#A6AEB8;color-scheme:dark}}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink)}
@@ -25,14 +28,16 @@ body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",san
  padding:calc(10px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(36px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 .wrap{max-width:600px;margin:0 auto;padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:8px 4px 14px}
-.top h1{margin:0;font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.05}
+.top h1{margin:0;font-family:var(--display);font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.hello{font-size:15px;color:var(--sub);margin-bottom:2px}
 .top .sub{font-size:14px;color:var(--sub);margin-top:4px}
 .top a{color:var(--accent);text-decoration:none;font-size:16px;font-weight:500;padding:4px 0;white-space:nowrap;align-self:flex-start;margin-top:8px}
 .seg-old{display:grid;grid-template-columns:repeat(3,1fr);background:var(--fill);border-radius:9px;padding:2px;margin:0 0 6px}
 .seg button{font:inherit;font-size:14px;font-weight:500;border:0;border-radius:7px;padding:6px 4px;background:transparent;color:var(--ink);cursor:pointer;position:relative}
 .seg button[aria-pressed="true"]{background:var(--group);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .badge{display:inline-block;min-width:17px;padding:0 5px;margin-left:5px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;font-weight:600;line-height:17px}
-.hd{font-size:13px;color:var(--sub);text-transform:uppercase;letter-spacing:.02em;margin:22px 16px 7px;display:flex;justify-content:space-between}
+.hd{font-size:17px;font-weight:700;color:var(--ink);margin:24px 6px 8px;display:flex;justify-content:space-between;align-items:baseline;font-family:var(--display);letter-spacing:-.01em}
+.hd .x{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13.5px;font-weight:500;color:var(--sub)}
 .hd .x{text-transform:none;letter-spacing:0}
 .group{background:var(--group);border-radius:12px;overflow:hidden}
 .row{display:grid;grid-template-columns:10px minmax(0,1fr) auto;column-gap:12px;align-items:center;padding:11px 16px;position:relative;cursor:pointer}
@@ -56,7 +61,7 @@ body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",san
 .ed input{border:0;background:var(--fill);color:var(--ink)}
 .key{display:grid;grid-template-columns:54px minmax(0,1fr);column-gap:12px;align-items:center;padding:11px 16px;position:relative}
 .key + .key::before{content:"";position:absolute;top:0;left:82px;right:0;border-top:.5px solid var(--sep)}
-.key .big{font-size:22px;font-weight:700;line-height:1;text-align:center;font-variant-numeric:tabular-nums;color:var(--ink)}
+.key .big{font-family:var(--display);font-size:26px;font-weight:800;line-height:1;text-align:center;font-variant-numeric:tabular-nums;color:var(--ink)}
 .key .big small{display:block;font-size:11px;font-weight:500;color:var(--sub);margin-top:3px}
 .key .big.red{color:var(--red)}.key .big.orange{color:var(--orange)}
 .empty{padding:13px 16px;color:var(--sub);font-size:15px}
@@ -85,9 +90,9 @@ ol{margin:0;padding-left:20px;color:var(--sub);font-size:15px}
 .cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 0 4px;cursor:pointer;min-width:0}
 .cell .num{font-size:16px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;font-variant-numeric:tabular-nums}
 .cell.out .num{color:var(--sub);opacity:.5}
-.cell.today .num{color:var(--red);font-weight:700}
+.cell.today .num{color:var(--coral);font-weight:800}
 .cell.sel .num{background:var(--ink);color:var(--bg);font-weight:700}
-.cell.sel.today .num{background:var(--red);color:#fff}
+.cell.sel.today .num{background:var(--coral);color:#fff}
 .dots{display:flex;gap:3px;height:6px}
 .dots i{width:5px;height:5px;border-radius:50%;background:var(--cat);display:block}
 .dots i.blk{background:transparent;border:1.2px solid var(--cat);width:6px;height:6px}
@@ -127,13 +132,24 @@ section{animation:fade .18s ease-out}
 .nb ul{margin:2px 0 0;padding-left:16px;color:var(--ink)}
 .nb ul li::marker{content:"– "}
 .catl{font-size:12.5px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.03em}
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:18px 18px 16px;color:#fff;background:linear-gradient(145deg,var(--hero1),var(--hero2));box-shadow:0 10px 30px rgba(10,78,99,.25);margin-top:4px}
+.hero .lbl{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.hero .ttl{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:6px 0 4px;position:relative;z-index:1}
+.hero .when{font-size:15px;opacity:.92;position:relative;z-index:1}
+.hero .cd{position:absolute;right:16px;top:16px;text-align:center;z-index:1;background:var(--coral);border-radius:16px;padding:8px 12px 7px;min-width:64px;box-shadow:0 6px 16px rgba(242,107,58,.35)}
+.hero .cd b{display:block;font-family:var(--display);font-size:34px;font-weight:800;line-height:1}
+.hero .cd span{font-size:12px;font-weight:600;opacity:.85}
+.hero .stats{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;position:relative;z-index:1}
+.hero .stats span{background:rgba(255,255,255,.16);border-radius:99px;padding:5px 11px;font-size:13px;font-weight:600}
+.hero .stats span.warn{background:var(--coral)}
+.hero .ttl,.hero .when{padding-right:86px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <div><h1>Tracker</h1><div class="sumline" id="sumline"></div><div class="sub" id="updated">Loading…</div></div>
+    <div><div class="hello" id="hello">Hi Jihee</div><h1>Tracker</h1><div class="sub" id="updated">Loading…</div><div class="sumline" id="sumline" hidden></div></div>
     <a href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">Open full</a>
   </div>
 
@@ -382,8 +398,25 @@ function renderPlan(list, msg){
   let h = "";
 
   const keys = open_.filter(i => i.kind === "milestone" && i.due && days(i.due) >= 0 && days(i.due) <= 21).sort(byDue);
+  let heroId = null;
+  {
+    const soonMs = keys.filter(k => days(k.due) <= 2);
+    const nextTask = open_.filter(i => i.due && i.due >= t).sort(byDue)[0];
+    const nx = soonMs[0] || nextTask;
+    const nDue0 = open_.filter(i => i.due === t).length;
+    const bt = blocks(t).reduce((s, b) => s + (+b[1] || 0), 0);
+    const od = open_.filter(i => i.due && i.due < t && i.kind !== "milestone").length;
+    if (nx) {
+      heroId = nx.id;
+      const n = days(nx.due);
+      h += '<div class="hero"><div class="lbl">Next up</div><div class="ttl">' + esc(nx.title) + '</div><div class="when">' + esc((n === 0 ? "Today" : n === 1 ? "Tomorrow" : fmt(nx.due)) + (nx.time ? " · " + nx.time : "")) + '</div>'
+        + '<div class="cd"><b>' + (n === 0 ? "0" : esc(n)) + '</b><span>' + (n === 0 ? "today" : n === 1 ? "day left" : "days left") + "</span></div>"
+        + '<div class="stats"><span>' + nDue0 + " due today</span>" + (bt ? "<span>" + esc(hrs(bt)) + " planned</span>" : "") + (od ? '<span class="warn">' + od + " overdue</span>" : "") + "</div></div>";
+    }
+  }
   if (keys.length) {
-    h += group("Key dates", keys.map(k => { const n = days(k.due); const c = n <= 1 ? "red" : n <= 3 ? "orange" : "";
+    const kk = keys.filter(k => k.id !== heroId);
+    if (kk.length) h += group("Key dates", kk.slice(0, 4).map(k => { const n = days(k.due); const c = n <= 1 ? "red" : n <= 3 ? "orange" : "";
       const big = n === 0 ? 'Today' : n + "<small>" + (n === 1 ? "day" : "days") + "</small>";
       return '<div class="key"><div class="big ' + c + '">' + big + '</div><div><div class="t">' + esc(k.title) + '</div><div class="m">' + esc(fmt(k.due) + (k.time ? " · " + k.time : "")) + "</div></div></div>"; }).join(""));
   }
@@ -514,6 +547,7 @@ if ("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("mess
 });
 document.addEventListener("visibilitychange", () => { if (!document.hidden) { loadData(); renderAlerts(); } });
 
+(function(){ const hr = new Date().getHours(); $("hello").textContent = (hr < 5 ? "Still up, " : hr < 12 ? "Good morning, " : hr < 18 ? "Good afternoon, " : "Good evening, ") + "Jihee"; })();
 (async () => {
   try { await getReg(); } catch (e) {}
   setTab(location.hash === "#alerts" ? "alerts" : "plan");
