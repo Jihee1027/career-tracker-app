@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Career Tracker</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tracker">
+<meta name="theme-color" content="#0E6B8A">
+<style>
+:root{--bg:#F2F4F6;--surface:#fff;--ink:#16212B;--muted:#5B6877;--line:#DCE1E7;--accent:#0E6B8A;--accent-ink:#fff;--ok:#1E7A4A;--warm:#8A5A00}
+@media (prefers-color-scheme: dark){:root{--bg:#0F161C;--surface:#17212A;--ink:#E7EDF2;--muted:#9AA8B6;--line:#28343F;--accent:#5BB8D6;--accent-ink:#07202A;--ok:#6FD39B;--warm:#F2C14E;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ padding:calc(24px + env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+.wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.head{display:flex;align-items:center;gap:14px}
+.head img{width:56px;height:56px;border-radius:14px}
+h1{margin:0;font-size:24px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.card h2{margin:0;font-size:16px}
+ol{margin:0;padding-left:20px;color:var(--muted);font-size:15px}
+button,.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:12px 16px;background:var(--accent);color:var(--accent-ink);cursor:pointer;text-align:center;text-decoration:none;display:block}
+.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+textarea{width:100%;min-height:110px;font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+.status{font-size:14px;color:var(--muted)}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warm);font-weight:600}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><img src="icon-192.png" alt=""><div><h1>Career Tracker</h1><div class="sub">마감과 할 일 알림</div></div></div>
+
+  <a class="btn" href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">트래커 열기</a>
+
+  <div class="card" id="install" hidden>
+    <h2>먼저 홈 화면에 추가해 주세요</h2>
+    <ol>
+      <li>Safari 아래쪽 공유 버튼(□↑)을 눌러요.</li>
+      <li>"홈 화면에 추가"를 눌러요.</li>
+      <li>홈 화면의 Tracker 아이콘으로 다시 열어요.</li>
+    </ol>
+    <div class="sub">아이폰은 홈 화면에서 연 앱에서만 알림을 켤 수 있어요.</div>
+  </div>
+
+  <div class="card" id="enable">
+    <h2>알림 켜기</h2>
+    <div class="sub">버튼을 누르고 "허용"을 선택하면 아래에 연결 코드가 나와요. 그 코드를 Claude에게 보내 주세요.</div>
+    <button id="btn-enable" type="button">알림 켜기</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="card" id="codecard" hidden>
+    <h2>연결 코드</h2>
+    <textarea id="code" readonly aria-label="연결 코드"></textarea>
+    <button id="btn-copy" type="button">코드 복사</button>
+    <button id="btn-test" type="button" class="ghost">이 기기에서 테스트 알림 보기</button>
+  </div>
+</div>
+<script>
+const VAPID_PUBLIC = "BKHZE6biucKuUFqKgfzA-se6DDNuaCS-AdMGZUd8p3TfHUgM3gHjdQSbjRSP6WHWZ74mcPIKXfs1xwPN7JUGLaQ";
+const $ = id => document.getElementById(id);
+const standalone = window.navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+if (isIOS && !standalone) { $("install").hidden = false; $("enable").hidden = true; }
+function b64ToU8(s){ const p = "=".repeat((4 - s.length % 4) % 4); const r = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from([...r].map(c => c.charCodeAt(0))); }
+function say(msg, cls){ const el = $("status"); el.textContent = msg; el.className = "status " + (cls || ""); }
+let reg = null;
+async function getReg(){
+  if (reg) return reg;
+  reg = await navigator.serviceWorker.register("sw.js");
+  await navigator.serviceWorker.ready;
+  return reg;
+}
+function showCode(sub){
+  $("code").value = JSON.stringify(sub);
+  $("codecard").hidden = false;
+  say("알림이 켜졌어요. 아래 코드를 복사해서 Claude에게 보내 주세요.", "ok");
+}
+(async () => {
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+  try { const r = await getReg(); const s = await r.pushManager.getSubscription(); if (s) showCode(s); } catch (e) {}
+})();
+$("btn-enable").addEventListener("click", async () => {
+  try {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) { say("이 브라우저는 알림을 지원하지 않아요. 아이폰이면 홈 화면에 추가한 앱에서 열어 주세요.", "warn"); return; }
+    const perm = await Notification.requestPermission();
+    if (perm !== "granted") { say("알림이 허용되지 않았어요. 설정 → 알림 → Tracker에서 허용해 주세요.", "warn"); return; }
+    const r = await getReg();
+    let s = await r.pushManager.getSubscription();
+    if (!s) s = await r.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(VAPID_PUBLIC) });
+    showCode(s);
+  } catch (e) { say("알림을 켜지 못했어요: " + (e && e.message ? e.message : e), "warn"); }
+});
+$("btn-copy").addEventListener("click", async () => {
+  const t = $("code");
+  try { await navigator.clipboard.writeText(t.value); $("btn-copy").textContent = "복사했어요"; }
+  catch (e) { t.focus(); t.select(); $("btn-copy").textContent = "선택했어요. 길게 눌러 복사하세요"; }
+});
+$("btn-test").addEventListener("click", async () => {
+  try { const r = await getReg(); await r.showNotification("Career Tracker", { body: "테스트 알림이에요. 이렇게 와요.", icon: "icon-192.png", tag: "test" }); }
+  catch (e) { say("테스트 알림을 보내지 못했어요.", "warn"); }
+});
+</script>
+</body>
+</html>
