@@ -23,12 +23,12 @@
 html,body{margin:0;background:var(--bg);color:var(--ink)}
 body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;
  padding:calc(10px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(36px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
-.wrap{max-width:600px;margin:0 auto}
+.wrap{max-width:600px;margin:0 auto;padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 .top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:8px 4px 14px}
 .top h1{margin:0;font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.05}
 .top .sub{font-size:14px;color:var(--sub);margin-top:4px}
-.top a{color:var(--accent);text-decoration:none;font-size:16px;font-weight:500;padding:4px 0}
-.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--fill);border-radius:9px;padding:2px;margin:0 0 6px}
+.top a{color:var(--accent);text-decoration:none;font-size:16px;font-weight:500;padding:4px 0;white-space:nowrap;align-self:flex-start;margin-top:8px}
+.seg-old{display:grid;grid-template-columns:repeat(3,1fr);background:var(--fill);border-radius:9px;padding:2px;margin:0 0 6px}
 .seg button{font:inherit;font-size:14px;font-weight:500;border:0;border-radius:7px;padding:6px 4px;background:transparent;color:var(--ink);cursor:pointer;position:relative}
 .seg button[aria-pressed="true"]{background:var(--group);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .badge{display:inline-block;min-width:17px;padding:0 5px;margin-left:5px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;font-weight:600;line-height:17px}
@@ -100,13 +100,34 @@ ol{margin:0;padding-left:20px;color:var(--sub);font-size:15px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:90vw;z-index:9}
 .foot{margin-top:24px;text-align:center}
 .foot button{font:inherit;font-size:15px;border:0;background:transparent;color:var(--accent);cursor:pointer}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:8;display:grid;grid-template-columns:repeat(3,1fr);
+ padding:6px max(10px,env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
+ background:color-mix(in srgb,var(--group) 82%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--sep)}
+.tabbar button{font:inherit;border:0;background:transparent;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;cursor:pointer;position:relative;font-size:10.5px;font-weight:500}
+.tabbar button svg{width:26px;height:26px}
+.tabbar button[aria-pressed="true"]{color:var(--accent)}
+.tabbar .badge{position:absolute;top:0;left:calc(50% + 6px);margin:0}
+.row:active,.key:active{background:var(--fill)}
+.ring{width:22px;height:22px;border-radius:50%;border:2px solid var(--cat);display:grid;place-items:center;padding:0;background:transparent;cursor:pointer;color:transparent;transition:background .15s, transform .15s}
+.ring svg{width:12px;height:12px}
+.ring.ms{border-radius:6px}
+.ring.blk{border-style:dashed}
+.row.done .ring{background:var(--cat);color:#fff}
+.ring:active{transform:scale(.9)}
+.row{grid-template-columns:22px minmax(0,1fr) auto}
+.row + .row::before,.group > * + .row::before{left:50px}
+section{animation:fade .18s ease-out}
+@keyframes fade{from{opacity:.4;transform:translateY(3px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){section{animation:none}.ring{transition:none}}
+.sumline{font-size:15px;color:var(--ink);margin-top:2px}
+.sumline b{font-weight:600}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <div><h1>Tracker</h1><div class="sub" id="updated">Loading…</div></div>
+    <div><h1>Tracker</h1><div class="sumline" id="sumline"></div><div class="sub" id="updated">Loading…</div></div>
     <a href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">Open full</a>
   </div>
 
@@ -116,11 +137,6 @@ ol{margin:0;padding-left:20px;color:var(--sub);font-size:15px}
     <div class="note">On iPhone, notifications only work in the Home Screen app.</div>
   </div>
 
-  <div class="seg" role="group" aria-label="View">
-    <button type="button" id="tab-plan" aria-pressed="true">Plan</button>
-    <button type="button" id="tab-cal" aria-pressed="false">Calendar</button>
-    <button type="button" id="tab-alerts" aria-pressed="false">Alerts<span class="badge" id="badge" hidden></span></button>
-  </div>
 
   <section id="plan"></section>
 
@@ -169,6 +185,11 @@ ol{margin:0;padding-left:20px;color:var(--sub);font-size:15px}
   <div class="foot"><button type="button" id="btn-relink">Settings</button></div>
   <div class="toast" id="toast" hidden></div>
 </div>
+<nav class="tabbar" aria-label="View">
+  <button type="button" id="tab-plan" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="17.5" r="1.3" fill="currentColor" stroke="none"/><path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/></svg>Plan</button>
+  <button type="button" id="tab-cal" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><circle cx="8.5" cy="14" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1.1" fill="currentColor" stroke="none"/></svg>Calendar</button>
+  <button type="button" id="tab-alerts" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>Alerts<span class="badge" id="badge" hidden></span></button>
+</nav>
 <script>
 const VAPID_PUBLIC = "BKHZE6biucKuUFqKgfzA-se6DDNuaCS-AdMGZUd8p3TfHUgM3gHjdQSbjRSP6WHWZ74mcPIKXfs1xwPN7JUGLaQ";
 const CAT = {interview:"var(--c-interview)", offer:"var(--c-offer)", school:"var(--c-school)", admin:"var(--c-admin)", other:"var(--c-other)"};
@@ -294,7 +315,7 @@ async function loadData(){
     snap = data;
     items = await merged();
     const u = new Date(data.updatedAt);
-    $("updated").textContent = new Date().toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}) + " · updated " + u.toLocaleString("en-US",{hour:"numeric",minute:"2-digit"});
+    $("updated").textContent = new Date().toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"}) + " · synced " + (sod(u).getTime() === today().getTime() ? u.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}) : u.toLocaleDateString("en-US",{month:"short",day:"numeric"}));
     renderPlan(items); renderCal();
   } catch (e) {
     $("updated").textContent = "Couldn't load your plan";
@@ -316,13 +337,14 @@ function rowHtml(it, extra, blk){
   if (blk) r = extra;
   else if (!done && n !== null) { r = n < 0 ? (-n) + "d late" : n === 0 ? "Today" : n === 1 ? "Tomorrow" : n + " days"; rc = n <= 1 ? "red" : n <= 3 ? "orange" : ""; }
   else if (done) r = "Done";
-  const dotc = "dot" + (it.kind === "milestone" ? " ms" : "") + (blk ? " blk" : "");
+  const dotc = "ring" + (it.kind === "milestone" ? " ms" : "") + (blk ? " blk" : "");
+  const check = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.6 3.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   let more = "";
   if (isOpen) {
     more = '<div class="more">' + '<div class="n">' + esc((CATN[it.category] || "Other") + (blk ? " · due " + fmt(it.due) : "") + (it.notes ? "\n" + it.notes : "")) + "</div>" + editHtml(it) + "</div>";
   }
   return '<div class="row' + (done ? " done" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(key) + '">'
-    + '<span class="' + dotc + '"></span><div><div class="t">' + esc(it.title) + '</div><div class="m">' + m + '</div></div><span class="r ' + rc + '">' + esc(r) + "</span>" + more + "</div>";
+    + '<button type="button" class="' + dotc + '" data-ring="' + esc(it.id) + '" aria-label="' + esc((done ? "Reopen " : "Complete ") + it.title) + '">' + check + '</button><div><div class="t">' + esc(it.title) + '</div><div class="m">' + m + '</div></div><span class="r ' + rc + '">' + esc(r) + "</span>" + more + "</div>";
 }
 
 function group(title, rowsHtml, right){
@@ -367,10 +389,20 @@ function renderPlan(list, msg){
   const nodate = open_.filter(i => !i.due);
   if (nodate.length) h += group("No date", nodate.map(i => rowHtml(i)).join(""));
   $("plan").innerHTML = h;
-  $("addsec").hidden = !token;
+  $("addsec").hidden = !token || $("plan").hidden;
+  const nDue = dueToday.length;
+  $("sumline").innerHTML = "<b>" + nDue + "</b> due today" + (total ? " · <b>" + esc(hrs(total)) + "</b> planned" : "") + (overdue.length ? ' · <span style="color:var(--red)"><b>' + overdue.length + "</b> overdue</span>" : "");
 }
 
-$("plan").addEventListener("click", async e => { if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
+async function onRing(e){
+  const r = e.target.closest("[data-ring]"); if (!r) return false;
+  e.stopPropagation();
+  if (!token) { toast("Turn on editing in Settings to check items off here."); return true; }
+  const it = items.find(i => i.id === r.dataset.ring); if (!it) return true;
+  await edit("update", it.id, it.status === "done" ? {status: "todo"} : {status: "done", doneAt: new Date().toISOString()});
+  return true;
+}
+$("plan").addEventListener("click", async e => { if (await onRing(e)) return; if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
 
 /* alerts */
 let clearArmed = false;
@@ -414,11 +446,12 @@ function renderCal(){
   $("daylist").innerHTML = (due.length || bl.length) ? due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), selDay)).join("") : '<div class="empty">Nothing due or planned.</div>';
 }
 $("cal").addEventListener("click", e => { const c = e.target.closest(".cell"); if (!c) return; selDay = c.getAttribute("data-date"); open = null; renderCal(); });
-$("daylist").addEventListener("click", async e => { if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderCal(); });
+$("daylist").addEventListener("click", async e => { if (await onRing(e)) return; if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderCal(); });
 $("prevm").addEventListener("click", () => { calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); });
 $("nextm").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
 $("todaybtn").addEventListener("click", () => { calY = today().getFullYear(); calM = today().getMonth(); selDay = iso(today()); renderCal(); });
 function setTab(t){
+  window.scrollTo(0, 0);
   $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts"; $("calsec").hidden = t !== "cal"; $("addsec").hidden = t !== "plan" || !token;
   $("tab-plan").setAttribute("aria-pressed", t === "plan"); $("tab-alerts").setAttribute("aria-pressed", t === "alerts"); $("tab-cal").setAttribute("aria-pressed", t === "cal");
   if (t === "alerts") markSeen();
