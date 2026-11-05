@@ -121,6 +121,12 @@ section{animation:fade .18s ease-out}
 @media (prefers-reduced-motion: reduce){section{animation:none}.ring{transition:none}}
 .sumline{font-size:15px;color:var(--ink);margin-top:2px}
 .sumline b{font-weight:600}
+.nb{margin:0;padding-left:18px;font-size:15px;line-height:1.45;color:var(--ink)}
+.nb li{margin:3px 0}
+.nb li::marker{color:var(--sub)}
+.nb ul{margin:2px 0 0;padding-left:16px;color:var(--ink)}
+.nb ul li::marker{content:"– "}
+.catl{font-size:12.5px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.03em}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -341,10 +347,20 @@ function rowHtml(it, extra, blk){
   const check = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.6 3.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   let more = "";
   if (isOpen) {
-    more = '<div class="more">' + '<div class="n">' + esc((CATN[it.category] || "Other") + (blk ? " · due " + fmt(it.due) : "") + (it.notes ? "\n" + it.notes : "")) + "</div>" + editHtml(it) + "</div>";
+    more = '<div class="more">' + '<div class="catl">' + esc((CATN[it.category] || "Other") + (blk ? " · due " + fmt(it.due) : "")) + "</div>" + notesHtml(it.notes) + editHtml(it) + "</div>";
   }
   return '<div class="row' + (done ? " done" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(key) + '">'
     + '<button type="button" class="' + dotc + '" data-ring="' + esc(it.id) + '" aria-label="' + esc((done ? "Reopen " : "Complete ") + it.title) + '">' + check + '</button><div><div class="t">' + esc(it.title) + '</div><div class="m">' + m + '</div></div><span class="r ' + rc + '">' + esc(r) + "</span>" + more + "</div>";
+}
+
+function notesHtml(t){
+  if (!t) return "";
+  const parts = String(t).replace(/([.;])\s+(?=[A-Z0-9(])/g, "$1\n").split(/\n+/).map(x => x.trim().replace(/[.;]$/, "")).filter(Boolean);
+  return '<ul class="nb">' + parts.map(p => {
+    const m = /^([^:]{2,40}):\s*(.+)$/.exec(p);
+    if (m) { const sub = m[2].split(/,\s*(?![^()]*\))/).map(x => x.trim()).filter(Boolean); if (sub.length >= 3) return "<li>" + esc(m[1]) + "<ul>" + sub.map(x => "<li>" + esc(x) + "</li>").join("") + "</ul></li>"; }
+    return "<li>" + esc(p) + "</li>";
+  }).join("") + "</ul>";
 }
 
 function group(title, rowsHtml, right){
