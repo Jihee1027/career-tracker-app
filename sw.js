@@ -1,19 +1,60 @@
 const TRACKER = "https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8";
-self.addEventListener("install", e => self.skipWaiting());
+function openDb() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open("tracker", 1);
+    r.onupgradeneeded = () => {
+      const d = r.result;
+      if (!d.objectStoreNames.contains("kv")) d.createObjectStore("kv");
+      if (!d.objectStoreNames.contains("alerts")) d.createObjectStore("alerts", { keyPath: "id", autoIncrement: true });
+    };
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function put(store, val, key) {
+  const d = await openDb();
+  return new Promise((res, rej) => {
+    const t = d.transaction(store, "readwrite");
+    if (key === undefined) t.objectStore(store).put(val); else t.objectStore(store).put(val, key);
+    t.oncomplete = () => res();
+    t.onerror = () => rej(t.error);
+  });
+}
+async function trimAlerts(max) {
+  const d = await openDb();
+  return new Promise((res) => {
+    const t = d.transaction("alerts", "readwrite"), s = t.objectStore("alerts");
+    const rq = s.getAllKeys();
+    rq.onsuccess = () => { const keys = rq.result || []; keys.slice(0, Math.max(0, keys.length - max)).forEach(k => s.delete(k)); };
+    t.oncomplete = () => res();
+    t.onerror = () => res();
+  });
+}
+self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 self.addEventListener("push", e => {
   let d = {};
   try { d = e.data ? e.data.json() : {}; } catch (_) { d = { body: e.data ? e.data.text() : "" }; }
-  e.waitUntil(self.registration.showNotification(d.title || "Career Tracker", {
-    body: d.body || "",
-    icon: "icon-192.png",
-    badge: "icon-192.png",
-    tag: d.tag || "tracker",
-    data: { url: d.url || TRACKER }
-  }));
+  e.waitUntil((async () => {
+    const title = d.title || "Career Tracker", body = d.body || "";
+    try {
+      if (d.type === "key" && d.key) await put("kv", d.key, "snapKey");
+      await put("alerts", { title, body, at: new Date().toISOString() });
+      await trimAlerts(100);
+    } catch (_) {}
+    const cs = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    cs.forEach(c => c.postMessage({ type: "alert" }));
+    await self.registration.showNotification(title, {
+      body, icon: "icon-192.png", badge: "icon-192.png",
+      tag: d.tag || ("t" + Date.now()), data: { url: "./#alerts" }
+    });
+  })());
 });
 self.addEventListener("notificationclick", e => {
   e.notification.close();
-  const url = (e.notification.data && e.notification.data.url) || TRACKER;
-  e.waitUntil(self.clients.openWindow(url));
+  e.waitUntil((async () => {
+    const cs = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const c of cs) { if ("focus" in c) { c.postMessage({ type: "open", tab: "alerts" }); return c.focus(); } }
+    return self.clients.openWindow("./#alerts");
+  })());
 });

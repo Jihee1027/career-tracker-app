@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -11,101 +11,267 @@
 <meta name="apple-mobile-web-app-title" content="Tracker">
 <meta name="theme-color" content="#0E6B8A">
 <style>
-:root{--bg:#F2F4F6;--surface:#fff;--ink:#16212B;--muted:#5B6877;--line:#DCE1E7;--accent:#0E6B8A;--accent-ink:#fff;--ok:#1E7A4A;--warm:#8A5A00}
-@media (prefers-color-scheme: dark){:root{--bg:#0F161C;--surface:#17212A;--ink:#E7EDF2;--muted:#9AA8B6;--line:#28343F;--accent:#5BB8D6;--accent-ink:#07202A;--ok:#6FD39B;--warm:#F2C14E;color-scheme:dark}}
+:root{--bg:#F2F4F6;--surface:#fff;--ink:#16212B;--muted:#5B6877;--line:#DCE1E7;--accent:#0E6B8A;--accent-ink:#fff;--soft:#E4F0F4;
+--hot:#B93815;--hot-bg:#FCE8E1;--warm:#8A5A00;--warm-bg:#FBF0D5;--ok:#1E7A4A;
+--c-interview:#0E6B8A;--c-offer:#7A4FB5;--c-school:#2F7D3B;--c-admin:#A35A12;--c-other:#66727F}
+@media (prefers-color-scheme: dark){:root{--bg:#0F161C;--surface:#17212A;--ink:#E7EDF2;--muted:#9AA8B6;--line:#28343F;--accent:#5BB8D6;--accent-ink:#07202A;--soft:#16303A;
+--hot:#FF9A78;--hot-bg:#3A1E15;--warm:#F2C14E;--warm-bg:#33280F;--ok:#6FD39B;
+--c-interview:#5BB8D6;--c-offer:#B79BE8;--c-school:#7CCB86;--c-admin:#E7A55B;--c-other:#A3B0BD;color-scheme:dark}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- padding:calc(24px + env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
-.wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-.head{display:flex;align-items:center;gap:14px}
-.head img{width:56px;height:56px;border-radius:14px}
-h1{margin:0;font-size:24px;letter-spacing:-.01em}
-.sub{color:var(--muted);font-size:14px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
-.card h2{margin:0;font-size:16px}
-ol{margin:0;padding-left:20px;color:var(--muted);font-size:15px}
-button,.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:12px 16px;background:var(--accent);color:var(--accent-ink);cursor:pointer;text-align:center;text-decoration:none;display:block}
-.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
-textarea{width:100%;min-height:110px;font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
-.status{font-size:14px;color:var(--muted)}
-.ok{color:var(--ok);font-weight:600}.warn{color:var(--warm);font-weight:600}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ padding:calc(14px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.head{display:flex;align-items:center;gap:12px}
+.head img{width:44px;height:44px;border-radius:11px}
+.head h1{margin:0;font-size:21px;letter-spacing:-.01em;line-height:1.1}
+.head .sub{font-size:12.5px;color:var(--muted)}
+.head .grow{flex:1;min-width:0}
+.edit{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--surface)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.tabs button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:8px;background:transparent;color:var(--muted);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:99px;background:var(--hot);color:#fff;font-size:11px;line-height:18px}
+h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:6px 0 6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.card h3{margin:0;font-size:15px}
+.muted{color:var(--muted);font-size:13.5px}
+.keys{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.key{flex:0 0 auto;width:170px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--cat);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.key .what{font-weight:600;font-size:14px;line-height:1.25}
+.key .when{font-size:12px;color:var(--muted)}
+.pill{align-self:flex-start;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--accent)}
+.pill.hot{background:var(--hot-bg);color:var(--hot)}.pill.warm{background:var(--warm-bg);color:var(--warm)}
+.list{display:flex;flex-direction:column;gap:6px}
+.row{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--cat);border-radius:9px;padding:9px 12px;cursor:pointer}
+.row.blk{border-style:dashed;border-left-style:solid}
+.row .t{font-weight:600;font-size:14.5px;line-height:1.3}
+.row .m{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:2px}
+.row .n{font-size:13px;color:var(--muted);white-space:pre-line;margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
+.start{color:var(--warm);font-weight:600}
+.day{font-size:13px;font-weight:700;margin:10px 0 4px}
+.alert{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+.alert .at{font-size:12px;color:var(--muted)}
+.alert .t{font-weight:600;margin:2px 0}
+.alert .b{white-space:pre-line;font-size:14px}
+button.btn,a.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 14px;background:var(--accent);color:var(--accent-ink);cursor:pointer;text-align:center;text-decoration:none;display:block}
+button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+textarea{width:100%;min-height:90px;font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+ol{margin:0;padding-left:20px;color:var(--muted)}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--muted);font-size:14px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="head"><img src="icon-192.png" alt=""><div><h1>Career Tracker</h1><div class="sub">마감과 할 일 알림</div></div></div>
-
-  <a class="btn" href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">트래커 열기</a>
+  <div class="head">
+    <img src="icon-192.png" alt="">
+    <div class="grow"><h1>Career Tracker</h1><div class="sub" id="updated">Loading…</div></div>
+    <a class="edit" href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">Edit ↗</a>
+  </div>
 
   <div class="card" id="install" hidden>
-    <h2>먼저 홈 화면에 추가해 주세요</h2>
-    <ol>
-      <li>Safari 아래쪽 공유 버튼(□↑)을 눌러요.</li>
-      <li>"홈 화면에 추가"를 눌러요.</li>
-      <li>홈 화면의 Tracker 아이콘으로 다시 열어요.</li>
-    </ol>
-    <div class="sub">아이폰은 홈 화면에서 연 앱에서만 알림을 켤 수 있어요.</div>
+    <h3>Add this app to your Home Screen</h3>
+    <ol><li>Tap the Share button (□↑) in Safari.</li><li>Tap "Add to Home Screen".</li><li>Open Tracker from your Home Screen.</li></ol>
+    <div class="muted">On iPhone, notifications only work in the Home Screen app.</div>
   </div>
 
-  <div class="card" id="enable">
-    <h2>알림 켜기</h2>
-    <div class="sub">버튼을 누르고 "허용"을 선택하면 아래에 연결 코드가 나와요. 그 코드를 Claude에게 보내 주세요.</div>
-    <button id="btn-enable" type="button">알림 켜기</button>
-    <div class="status" id="status"></div>
+  <div class="card" id="enable" hidden>
+    <h3>Turn on notifications</h3>
+    <div class="muted">Tap the button, choose Allow, then send the code that appears to Claude.</div>
+    <button class="btn" id="btn-enable" type="button">Turn on notifications</button>
+    <div class="muted" id="enable-status"></div>
+    <textarea id="code" readonly hidden aria-label="Connection code"></textarea>
+    <button class="btn" id="btn-copy" type="button" hidden>Copy code</button>
   </div>
 
-  <div class="card" id="codecard" hidden>
-    <h2>연결 코드</h2>
-    <textarea id="code" readonly aria-label="연결 코드"></textarea>
-    <button id="btn-copy" type="button">코드 복사</button>
-    <button id="btn-test" type="button" class="ghost">이 기기에서 테스트 알림 보기</button>
+  <div class="tabs" role="group" aria-label="View">
+    <button type="button" id="tab-plan" aria-pressed="true">Plan</button>
+    <button type="button" id="tab-alerts" aria-pressed="false">Alerts<span class="badge" id="badge" hidden></span></button>
   </div>
+
+  <section id="plan"></section>
+
+  <section id="alerts" hidden>
+    <div class="list" id="alert-list"></div>
+    <button class="btn ghost" id="btn-clear" type="button" hidden>Clear alerts</button>
+  </section>
+
+  <button class="btn ghost" id="btn-relink" type="button">Notification settings</button>
 </div>
+
 <script>
 const VAPID_PUBLIC = "BKHZE6biucKuUFqKgfzA-se6DDNuaCS-AdMGZUd8p3TfHUgM3gHjdQSbjRSP6WHWZ74mcPIKXfs1xwPN7JUGLaQ";
+const CAT = {interview:"var(--c-interview)", offer:"var(--c-offer)", school:"var(--c-school)", admin:"var(--c-admin)", other:"var(--c-other)"};
+const CATN = {interview:"Interview", offer:"Offer", school:"School", admin:"Admin", other:"Other"};
 const $ = id => document.getElementById(id);
-const standalone = window.navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const standalone = navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
 const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-if (isIOS && !standalone) { $("install").hidden = false; $("enable").hidden = true; }
-function b64ToU8(s){ const p = "=".repeat((4 - s.length % 4) % 4); const r = atob((s + p).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from([...r].map(c => c.charCodeAt(0))); }
-function say(msg, cls){ const el = $("status"); el.textContent = msg; el.className = "status " + (cls || ""); }
-let reg = null;
-async function getReg(){
-  if (reg) return reg;
-  reg = await navigator.serviceWorker.register("sw.js");
-  await navigator.serviceWorker.ready;
-  return reg;
+let reg = null, items = [], open = null;
+
+/* dates */
+const sod = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const parse = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; };
+const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today = () => sod(new Date());
+const days = s => { const d = parse(s); return d ? Math.round((d - today())/864e5) : null; };
+const fmt = s => { const d = parse(s); return d ? d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}) : "No date"; };
+const left = n => n === null ? "" : n < 0 ? (-n)+(n===-1?" day overdue":" days overdue") : n === 0 ? "Today" : n === 1 ? "Tomorrow" : "in "+n+" days";
+const tone = n => n === null ? "" : n <= 2 ? "hot" : n <= 7 ? "warm" : "";
+const hrs = h => { h = +h; if (!h) return ""; return h < 1 ? Math.round(h*60)+"m" : (Math.round(h*10)/10)+"h"; };
+
+/* storage */
+function openDb(){ return new Promise((res, rej) => { const r = indexedDB.open("tracker", 1);
+  r.onupgradeneeded = () => { const d = r.result; if (!d.objectStoreNames.contains("kv")) d.createObjectStore("kv"); if (!d.objectStoreNames.contains("alerts")) d.createObjectStore("alerts", {keyPath:"id", autoIncrement:true}); };
+  r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+async function kvGet(k){ const d = await openDb(); return new Promise(res => { const q = d.transaction("kv").objectStore("kv").get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(null); }); }
+async function kvSet(k, v){ const d = await openDb(); return new Promise(res => { const t = d.transaction("kv","readwrite"); t.objectStore("kv").put(v, k); t.oncomplete = () => res(); t.onerror = () => res(); }); }
+async function allAlerts(){ const d = await openDb(); return new Promise(res => { const q = d.transaction("alerts").objectStore("alerts").getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); }
+async function clearAlerts(){ const d = await openDb(); return new Promise(res => { const t = d.transaction("alerts","readwrite"); t.objectStore("alerts").clear(); t.oncomplete = () => res(); t.onerror = () => res(); }); }
+
+/* data */
+function b64(s){ s = s.replace(/-/g,"+").replace(/_/g,"/"); s += "=".repeat((4 - s.length % 4) % 4); return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
+async function loadData(){
+  const key = await kvGet("snapKey").catch(() => null);
+  if (!key) { $("updated").textContent = "Waiting for your tracker key"; renderPlan(null, "Your plan shows up here after the setup notification arrives."); return; }
+  try {
+    const r = await fetch("data.json?t=" + Date.now(), {cache:"no-store"});
+    if (!r.ok) throw new Error("no data yet");
+    const enc = await r.json();
+    const k = await crypto.subtle.importKey("raw", b64(key), "AES-GCM", false, ["decrypt"]);
+    const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(enc.iv)}, k, b64(enc.ct));
+    const data = JSON.parse(new TextDecoder().decode(plain));
+    items = data.items || [];
+    const u = new Date(data.updatedAt);
+    $("updated").textContent = "Updated " + u.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+    renderPlan(items);
+  } catch (e) {
+    $("updated").textContent = "Couldn't load your plan";
+    renderPlan(null, "Couldn't load the latest plan. Pull to refresh or try again later.");
+  }
 }
-function showCode(sub){
-  $("code").value = JSON.stringify(sub);
-  $("codecard").hidden = false;
-  say("알림이 켜졌어요. 아래 코드를 복사해서 Claude에게 보내 주세요.", "ok");
+
+function rowHtml(it, extra, blk){
+  const n = days(it.due), isOpen = open === it.id + (blk ? "@" + blk : "");
+  const meta = [CATN[it.category] || "Other", fmt(it.due) + (it.time ? " · " + it.time : "")];
+  if (it.effort) meta.push("~" + hrs(it.effort));
+  let start = "";
+  if (it.status !== "done" && it.startBy && !blk) start = days(it.startBy) <= 0 ? '<span class="start">Start now</span>' : "<span>Start by " + esc(fmt(it.startBy)) + "</span>";
+  return '<div class="row' + (blk ? " blk" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(it.id + (blk ? "@" + blk : "")) + '">'
+    + '<div class="t">' + (blk ? "▸ " : "") + esc(it.title) + (extra ? " · " + esc(extra) : "") + '</div>'
+    + '<div class="m">' + meta.map(x => "<span>" + esc(x) + "</span>").join("") + start
+    + (n !== null && it.status !== "done" && !blk ? '<span class="pill ' + tone(n) + '">' + esc(left(n)) + "</span>" : "") + "</div>"
+    + (isOpen && it.notes ? '<div class="n">' + esc(it.notes) + "</div>" : "")
+    + "</div>";
 }
-(async () => {
+
+function renderPlan(list, msg){
+  if (!list) { $("plan").innerHTML = '<div class="empty">' + esc(msg) + "</div>"; return; }
+  const t = iso(today());
+  const open_ = list.filter(i => i.status !== "done");
+  const blocks = d => { const out = []; open_.forEach(i => (i.plan || []).forEach(p => { if (p.date === d) out.push([i, p.hours]); })); return out; };
+  let h = "";
+
+  const keys = open_.filter(i => i.kind === "milestone" && i.due && days(i.due) >= 0 && days(i.due) <= 21).sort((a,b) => a.due < b.due ? -1 : 1);
+  if (keys.length) {
+    h += "<h2>Key dates</h2><div class='keys'>" + keys.map(k => { const n = days(k.due);
+      return '<div class="key" style="--cat:' + (CAT[k.category] || CAT.other) + '"><span class="pill ' + tone(n) + '">' + esc(left(n)) + '</span><div class="what">' + esc(k.title) + '</div><div class="when">' + esc(fmt(k.due) + (k.time ? " · " + k.time : "")) + "</div></div>"; }).join("") + "</div>";
+  }
+
+  const overdue = open_.filter(i => i.due && i.due < t && i.kind !== "milestone");
+  if (overdue.length) h += "<h2>Overdue</h2><div class='list'>" + overdue.map(i => rowHtml(i)).join("") + "</div>";
+
+  const dueToday = open_.filter(i => i.due === t);
+  const bToday = blocks(t), total = bToday.reduce((s, b) => s + (+b[1] || 0), 0);
+  h += "<h2>Today" + (total ? " · " + hrs(total) + " planned" : "") + "</h2>";
+  if (!dueToday.length && !bToday.length) h += '<div class="empty">Nothing due or planned today.</div>';
+  else h += "<div class='list'>" + dueToday.map(i => rowHtml(i)).join("") + bToday.map(b => rowHtml(b[0], hrs(b[1]), t)).join("") + "</div>";
+
+  const startNow = open_.filter(i => i.startBy && i.startBy <= t && i.due !== t && !bToday.some(b => b[0].id === i.id) && i.kind !== "milestone").sort((a,b) => (a.due || "9") < (b.due || "9") ? -1 : 1).slice(0, 5);
+  if (startNow.length) h += "<h2>Start now</h2><div class='list'>" + startNow.map(i => rowHtml(i)).join("") + "</div>";
+
+  h += "<h2>Next 7 days</h2>";
+  let any = false;
+  for (let k = 1; k <= 7; k++) {
+    const d = new Date(today()); d.setDate(d.getDate() + k); const ds = iso(d);
+    const due = open_.filter(i => i.due === ds), bl = blocks(ds);
+    if (!due.length && !bl.length) continue;
+    any = true;
+    const tot = bl.reduce((s, b) => s + (+b[1] || 0), 0);
+    h += '<div class="day">' + esc(fmt(ds)) + (tot ? ' <span class="muted">· ' + hrs(tot) + " planned</span>" : "") + "</div><div class='list'>"
+      + due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), ds)).join("") + "</div>";
+  }
+  if (!any) h += '<div class="empty">Nothing in the next 7 days.</div>';
+
+  const later = open_.filter(i => i.due && days(i.due) > 7).sort((a,b) => a.due < b.due ? -1 : 1);
+  if (later.length) h += "<h2>Later</h2><div class='list'>" + later.map(i => rowHtml(i)).join("") + "</div>";
+  const nodate = open_.filter(i => !i.due);
+  if (nodate.length) h += "<h2>No date</h2><div class='list'>" + nodate.map(i => rowHtml(i)).join("") + "</div>";
+  $("plan").innerHTML = h;
+}
+
+$("plan").addEventListener("click", e => { const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
+
+/* alerts */
+let clearArmed = false;
+async function renderAlerts(){
+  const list = (await allAlerts()).sort((a, b) => b.id - a.id);
+  const seen = +(await kvGet("seenAlert") || 0);
+  const unseen = list.filter(a => a.id > seen).length;
+  $("badge").hidden = !unseen; $("badge").textContent = unseen;
+  $("alert-list").innerHTML = list.length ? list.map(a => '<div class="alert"><div class="at">' + esc(new Date(a.at).toLocaleString("en-US",{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})) + '</div><div class="t">' + esc(a.title) + '</div><div class="b">' + esc(a.body) + "</div></div>").join("")
+    : '<div class="empty">No alerts yet. Morning and evening briefs will show up here.</div>';
+  $("btn-clear").hidden = !list.length;
+  $("btn-clear").textContent = clearArmed ? "Tap again to clear" : "Clear alerts";
+  return list;
+}
+async function markSeen(){ const list = await allAlerts(); const max = list.reduce((m, a) => Math.max(m, a.id), 0); await kvSet("seenAlert", max); renderAlerts(); }
+$("btn-clear").addEventListener("click", async () => { if (!clearArmed) { clearArmed = true; renderAlerts(); return; } clearArmed = false; await clearAlerts(); renderAlerts(); });
+
+/* tabs */
+function setTab(t){
+  $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts";
+  $("tab-plan").setAttribute("aria-pressed", t === "plan"); $("tab-alerts").setAttribute("aria-pressed", t === "alerts");
+  if (t === "alerts") markSeen();
+}
+$("tab-plan").addEventListener("click", () => setTab("plan"));
+$("tab-alerts").addEventListener("click", () => setTab("alerts"));
+
+/* notifications */
+function u8(s){ return b64(s); }
+async function getReg(){ if (reg) return reg; reg = await navigator.serviceWorker.register("sw.js"); await navigator.serviceWorker.ready; return reg; }
+async function checkEnable(){
+  if (isIOS && !standalone) { $("install").hidden = false; return; }
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
-  try { const r = await getReg(); const s = await r.pushManager.getSubscription(); if (s) showCode(s); } catch (e) {}
-})();
+  const r = await getReg(); const s = await r.pushManager.getSubscription();
+  if (!s || Notification.permission !== "granted") $("enable").hidden = false;
+}
 $("btn-enable").addEventListener("click", async () => {
   try {
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) { say("이 브라우저는 알림을 지원하지 않아요. 아이폰이면 홈 화면에 추가한 앱에서 열어 주세요.", "warn"); return; }
     const perm = await Notification.requestPermission();
-    if (perm !== "granted") { say("알림이 허용되지 않았어요. 설정 → 알림 → Tracker에서 허용해 주세요.", "warn"); return; }
-    const r = await getReg();
-    let s = await r.pushManager.getSubscription();
-    if (!s) s = await r.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(VAPID_PUBLIC) });
-    showCode(s);
-  } catch (e) { say("알림을 켜지 못했어요: " + (e && e.message ? e.message : e), "warn"); }
+    if (perm !== "granted") { $("enable-status").textContent = "Notifications are off. Turn them on in Settings → Notifications → Tracker."; return; }
+    const r = await getReg(); let s = await r.pushManager.getSubscription();
+    if (!s) s = await r.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:u8(VAPID_PUBLIC)});
+    $("code").value = JSON.stringify(s); $("code").hidden = false; $("btn-copy").hidden = false;
+    $("enable-status").textContent = "Notifications are on. Send this code to Claude if it asks for it.";
+  } catch (e) { $("enable-status").textContent = "Couldn't turn on notifications: " + (e && e.message ? e.message : e); }
 });
-$("btn-copy").addEventListener("click", async () => {
-  const t = $("code");
-  try { await navigator.clipboard.writeText(t.value); $("btn-copy").textContent = "복사했어요"; }
-  catch (e) { t.focus(); t.select(); $("btn-copy").textContent = "선택했어요. 길게 눌러 복사하세요"; }
+$("btn-copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("code").value); $("btn-copy").textContent = "Copied"; } catch (e) { $("code").select(); $("btn-copy").textContent = "Selected. Long-press to copy"; } });
+$("btn-relink").addEventListener("click", () => { $("enable").hidden = !$("enable").hidden; });
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", e => {
+  if (!e.data) return;
+  if (e.data.type === "alert") { renderAlerts(); loadData(); }
+  if (e.data.type === "open") setTab(e.data.tab || "alerts");
 });
-$("btn-test").addEventListener("click", async () => {
-  try { const r = await getReg(); await r.showNotification("Career Tracker", { body: "테스트 알림이에요. 이렇게 와요.", icon: "icon-192.png", tag: "test" }); }
-  catch (e) { say("테스트 알림을 보내지 못했어요.", "warn"); }
-});
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { loadData(); renderAlerts(); } });
+
+(async () => {
+  try { await getReg(); } catch (e) {}
+  setTab(location.hash === "#alerts" ? "alerts" : "plan");
+  checkEnable(); renderAlerts(); loadData();
+})();
 </script>
 </body>
 </html>
