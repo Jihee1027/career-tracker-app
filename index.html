@@ -248,7 +248,7 @@ details.later summary::-webkit-details-marker{display:none}
 .pg svg{width:16px;height:16px;transform:rotate(-90deg)}
 .pg .t0{fill:none;stroke:rgba(255,255,255,.3);stroke-width:3.2}
 .pg .p0{fill:none;stroke:#fff;stroke-width:3.2;stroke-linecap:round;transition:stroke-dashoffset .5s}
-.hero .hf{margin-left:auto;font:inherit;font-size:13px;font-weight:700;border:0;border-radius:99px;padding:5px 12px 5px 10px;background:#fff;color:var(--hero2);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.hero .hf{font:inherit;font-size:13px;font-weight:700;border:0;border-radius:99px;padding:5px 12px 5px 10px;background:#fff;color:var(--hero2);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 .hero .hf svg{width:11px;height:11px}
 .ed .foc{background:var(--coral);color:#fff;display:inline-flex;align-items:center;gap:5px}
 .ed .foc svg{width:10px;height:10px}
@@ -277,6 +277,50 @@ details.later summary::-webkit-details-marker{display:none}
 .ptr.spin svg{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion: reduce){.completing .ring,.spark,.toast,.focus{animation:none}}
+/* top 3 widget */
+.w3{background:var(--group);border-radius:22px;padding:14px 16px 6px;margin:2px 0 14px;box-shadow:0 1px 0 var(--sep),0 8px 24px rgba(13,42,51,.06)}
+.w3h{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.w3h b{font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--coral)}
+.w3h span{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--sub);font-variant-numeric:tabular-nums}
+.w3h svg{width:18px;height:18px;transform:rotate(-90deg)}
+.w3h .t0{fill:none;stroke:var(--fill);stroke-width:3.4}.w3h .p0{fill:none;stroke:var(--coral);stroke-width:3.4;stroke-linecap:round}
+.w3 .row{padding:11px 0;grid-template-columns:26px minmax(0,1fr) auto}
+.w3 .row + .row::before{left:38px}
+.w3 .ring{width:26px;height:26px}
+.w3 .t{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.w3 .r{font-family:var(--display);font-size:16px;font-weight:800}
+.w3 .clear{padding:12px 0 14px;font-size:17px;font-weight:600;color:var(--sub)}
+/* weekly review */
+.revbtn{display:flex;align-items:center;gap:12px;width:100%;margin-top:24px;border:0;border-radius:18px;padding:14px 16px;background:var(--group);color:var(--ink);font:inherit;cursor:pointer;text-align:left}
+.revbtn .ri{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,var(--hero1),var(--hero2));color:#fff;flex:none}
+.revbtn .ri svg{width:20px;height:20px}
+.revbtn b{display:block;font-size:16px}.revbtn small{display:block;font-size:13.5px;color:var(--sub)}
+.revbtn .ch{margin-left:auto;color:var(--sub);font-size:20px}
+.review{position:fixed;inset:0;z-index:25;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;animation:up .22s ease-out;
+ padding:calc(12px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(30px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.review .in{max-width:600px;margin:0 auto}
+.rv-top{display:flex;justify-content:space-between;align-items:flex-start;margin:6px 4px 14px}
+.rv-top h2{margin:0;font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.rv-top .sub{font-size:14px;color:var(--sub);margin-top:4px}
+.rv-x{font:inherit;font-size:15px;font-weight:600;border:0;border-radius:99px;padding:7px 14px;background:var(--group);color:var(--accent);cursor:pointer}
+.rv-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.rv-stat{border-radius:18px;padding:14px;background:var(--group)}
+.rv-stat b{display:block;font-family:var(--display);font-size:36px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.rv-stat span{font-size:13.5px;font-weight:600;color:var(--sub)}
+.rv-stat.hero1{background:linear-gradient(145deg,var(--hero1),var(--hero2));color:#fff}.rv-stat.hero1 span{color:rgba(255,255,255,.8)}
+.rv-stat.warn b{color:var(--coral)}
+.rv-bars{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;background:var(--group);border-radius:18px;padding:12px 10px 10px}
+.rv-bars div{display:flex;flex-direction:column;align-items:center;gap:4px}
+.rv-bars .bar{width:60%;height:70px;border-radius:8px;background:var(--fill);position:relative;overflow:hidden}
+.rv-bars .bar i{position:absolute;left:0;right:0;bottom:0;border-radius:8px;background:linear-gradient(180deg,var(--hero1),var(--hero2))}
+.rv-bars .l{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase}
+.rv-bars .n{font-family:var(--display);font-size:15px;font-weight:800}
+.rv-bars .today .l{color:var(--coral)}
+.rv-cats{display:flex;flex-wrap:wrap;gap:8px}
+.rv-cats span{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:7px 12px;font-size:14px;font-weight:600;background:color-mix(in srgb,var(--cat) 15%,var(--group))}
+.rv-cats .ic{width:15px;height:15px}
+.rv-note{font-size:14px;color:var(--sub);margin:8px 6px 0}
+.f-note{font-size:13.5px;opacity:.8;text-align:center;max-width:320px;min-height:1.2em}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -352,6 +396,7 @@ details.later summary::-webkit-details-marker{display:none}
       <input type="password" id="tok" placeholder="github_pat_…" autocomplete="off" aria-label="GitHub token">
       <button class="btn" id="tok-save" type="button" data-i18n>Save token</button>
       <button class="btn danger" id="tok-remove" type="button" hidden data-i18n>Remove token</button>
+      <div class="note" id="timer-status"></div>
     </div>
     <div class="card">
       <h3 data-i18n>About</h3>
@@ -384,7 +429,9 @@ details.later summary::-webkit-details-marker{display:none}
   <div class="f-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" class="tr"/><circle cx="60" cy="60" r="54" class="pr" id="f-prog"/></svg><div class="f-time" id="f-time">25:00</div></div>
   <div class="f-row"><button type="button" class="f-b" id="f-minus" aria-label="5 minutes less">−5</button><button type="button" class="f-go" id="f-go">Start</button><button type="button" class="f-b" id="f-plus" aria-label="5 minutes more">+5</button></div>
   <div class="f-row"><button type="button" class="f-g" id="f-reset" data-i18n>Reset</button><button type="button" class="f-g" id="f-done" data-i18n>Mark done</button></div>
+  <div class="f-note" id="f-note"></div>
 </div>
+<div class="review" id="review" hidden role="dialog" aria-modal="true" aria-labelledby="rv-title"><div class="in" id="rv-in"></div></div>
 <nav class="tabbar" aria-label="View">
   <button type="button" id="tab-plan" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="17.5" r="1.3" fill="currentColor" stroke="none"/><path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/></svg><span data-i18n>Plan</span></button>
   <button type="button" id="tab-cal" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><circle cx="8.5" cy="14" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1.1" fill="currentColor" stroke="none"/></svg><span data-i18n>Calendar</span></button>
@@ -539,6 +586,7 @@ async function complete(it, el, quick){
 }
 async function reopen(it){ await edit("update", it.id, {status: "todo", doneAt: ""}, L("Reopened.", "다시 열었어요.")); }
 async function postpone(it){
+  logPush(it.id);
   const prev = it.due || "";
   const d = parse(it.due); let base = d && d >= today() ? d : today();
   base = new Date(base); base.setDate(base.getDate() + 1); const nd = iso(base);
@@ -558,6 +606,7 @@ async function loadToken(){
   $("fab").hidden = !token;
   $("addsec").hidden = !token || $("plan").hidden;
   $("tok-remove").hidden = !token;
+  kvGet("timerOk").then(v => { $("timer-status").textContent = v === true ? L("Focus alerts: on.", "집중 알림: 켜짐") : v === false ? L("Focus alerts: off. Add career-tracker-timer to this token to get a notification when a focus session ends.", "집중 알림: 꺼짐. 이 토큰에 career-tracker-timer 저장소를 추가하면 집중이 끝날 때 알림이 와요.") : ""; }).catch(() => {});
   $("tok-status").textContent = token ? L("Editing is on. Edits sync to the tracker within a few hours.", "편집이 켜져 있어요. 고친 내용은 몇 시간 안에 트래커에 반영돼요.") : L("Paste your GitHub token to edit from the app. Edits sync to the tracker within a few hours.", "앱에서 편집하려면 GitHub 토큰을 붙여 넣으세요. 고친 내용은 몇 시간 안에 트래커에 반영돼요.");
 }
 $("tok-save").addEventListener("click", async () => {
@@ -690,7 +739,7 @@ function renderPlan(list, msg){
   const open_ = list.filter(i => i.status !== "done");
   const blocks = d => { const out = []; open_.forEach(i => (i.plan || []).forEach(p => { if (p.date === d) out.push([i, p.hours]); })); return out; };
   const byDue = (a, b) => (a.due || "9") < (b.due || "9") ? -1 : (a.due || "9") > (b.due || "9") ? 1 : (a.priority || 2) - (b.priority || 2);
-  let h = "";
+  let h = top3Html(list);
 
   /* hero */
   const keys = open_.filter(i => i.kind === "milestone" && i.due && days(i.due) >= 0 && days(i.due) <= 30).sort(byDue);
@@ -746,6 +795,7 @@ function renderPlan(list, msg){
   const nodate = open_.filter(i => !i.due);
   if (later.length || nodate.length) h += '<details class="later"' + (laterOpen ? " open" : "") + '><summary class="hd">' + esc(L("Later & no date", "나중에 · 날짜 없음")) + '<span class="x">' + esc(L((later.length + nodate.length) + " items ›", (later.length + nodate.length) + "개 ›")) + "</span></summary>"
     + (later.length ? '<div class="group">' + later.map(i => rowHtml(i)).join("") + "</div>" : "") + (nodate.length ? '<div class="hd" style="font-size:15px">' + esc(L("No date", "날짜 없음")) + '</div><div class="group">' + nodate.map(i => rowHtml(i)).join("") + "</div>" : "") + "</details>";
+  h += reviewBtnHtml();
   $("plan").innerHTML = h;
   const det = $("plan").querySelector("details.later"); if (det) det.addEventListener("toggle", () => { laterOpen = det.open; });
   $("addsec").hidden = !token || $("plan").hidden;
@@ -756,6 +806,8 @@ let swipedAt = 0;
 $("plan").addEventListener("click", async e => {
   if (Date.now() - swipedAt < 450) return;
   if (await onRing(e)) return; if (await onEdit(e)) return;
+  if (e.target.closest("[data-review]")) { openReview(); return; }
+  const w = e.target.closest(".w3 .row"); if (w) { const it = items.find(i => i.id === w.dataset.id); if (it) openFocus(it); return; }
   const fb = e.target.closest("[data-focus]"); if (fb) { const it = items.find(i => i.id === fb.dataset.focus); if (it) openFocus(it); return; }
   const wd = e.target.closest(".wd"); if (wd) { selDay = wd.dataset.day; const d = parse(selDay); calY = d.getFullYear(); calM = d.getMonth(); setTab("cal"); renderCal(); return; }
   const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items);
@@ -856,6 +908,97 @@ $("prevm").addEventListener("click", () => { calM--; if (calM < 0) { calM = 11; 
 $("nextm").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
 $("todaybtn").addEventListener("click", () => { calY = today().getFullYear(); calM = today().getMonth(); selDay = iso(today()); renderCal(); });
 
+/* today top 3 widget */
+function top3Html(list){
+  const t = iso(today());
+  const open_ = list.filter(i => i.status !== "done");
+  const score = i => {
+    const n = days(i.due); let s = 0;
+    if (n !== null && n < 0 && i.kind !== "milestone") s += 400;
+    if (i.due === t) s += 300;
+    if ((i.plan || []).some(p => p.date === t)) s += 200;
+    if (i.startBy && i.startBy <= t) s += 120;
+    if (n !== null && n > 0) s += Math.max(0, 60 - n * 8);
+    s += (3 - (i.priority || 2)) * 25;
+    if (i.kind === "milestone" && n !== 0) s -= 150;
+    return s;
+  };
+  const pick = open_.map(i => [score(i), i]).filter(x => x[0] >= 100).sort((a, b) => b[0] - a[0]).slice(0, 3).map(x => x[1]);
+  const pg = todayProgress(list), C = 50.27;
+  const ring = pg.total ? '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" class="t0"/><circle cx="10" cy="10" r="8" class="p0" style="stroke-dasharray:' + C + ";stroke-dashoffset:" + (C * (1 - pg.done / pg.total)).toFixed(2) + '"/></svg>' + pg.done + "/" + pg.total : "";
+  const rows = pick.map(i => {
+    const n = days(i.due), done = i.status === "done";
+    const blk = (i.plan || []).find(p => p.date === t);
+    const right = i.due === t ? (i.time ? i.time.split(/[ ·(]/)[0] : L("Today", "오늘")) : blk ? hrs(blk.hours) : n === null ? "" : n < 0 ? L((-n) + "d late", (-n) + "일 지남") : n === 1 ? L("Tmrw", "내일") : fmt(i.due).replace(/,.*/, "");
+    return rowAttrs(i, "w3:" + i.id, "", "row") + ringHtml(i) + '<div><div class="t">' + esc(i.title) + '</div></div><span class="r' + (n !== null && n <= 0 ? " red" : "") + '">' + esc(right) + "</span></div>";
+  }).join("");
+  return '<div class="w3"><div class="w3h"><b>' + esc(L("Today · top 3", "오늘 · 딱 3개")) + "</b><span>" + ring + "</span></div>" + (rows || '<div class="clear">' + esc(L("All clear for today.", "오늘은 다 끝났어요.")) + "</div>") + "</div>";
+}
+
+/* weekly review */
+function weekStart(d){ const x = sod(d); const k = (x.getDay() + 6) % 7; x.setDate(x.getDate() - k); return x; }
+function pushLog(){ try { return JSON.parse(localStorage.getItem("pushLog") || "[]"); } catch (_) { return []; } }
+function logPush(id){ try { const cut = Date.now() - 30 * 864e5; const l = pushLog().filter(e => Date.parse(e.at) > cut); l.push({id, at: new Date().toISOString()}); localStorage.setItem("pushLog", JSON.stringify(l)); } catch (_) {} }
+function reviewBtnHtml(){
+  const ws = weekStart(new Date()), we = new Date(ws); we.setDate(we.getDate() + 7);
+  const done = items.filter(i => i.status === "done" && i.doneAt && new Date(i.doneAt) >= ws && new Date(i.doneAt) < we).length;
+  return '<button type="button" class="revbtn" data-review="1"><span class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V10M10 19V5M16 19v-6M22 19H2"/></svg></span><span><b>' + esc(L("Weekly review", "주간 리뷰")) + "</b><small>" + esc(L(done + " done this week · see next week", "이번 주 " + done + "개 완료 · 다음 주 미리보기")) + '</small></span><span class="ch">›</span></button>';
+}
+function openReview(){
+  const now = new Date(), ws = weekStart(now), we = new Date(ws); we.setDate(we.getDate() + 7);
+  const nws = new Date(we), nwe = new Date(we); nwe.setDate(nwe.getDate() + 7);
+  const inWeek = (d, a, b) => d && d >= a && d < b;
+  const done = items.filter(i => i.status === "done" && i.doneAt && inWeek(new Date(i.doneAt), ws, we));
+  const open_ = items.filter(i => i.status !== "done");
+  const slipped = open_.filter(i => i.due && parse(i.due) < today() && i.kind !== "milestone");
+  const pushes = pushLog().filter(e => inWeek(new Date(e.at), ws, we));
+  const pushedIds = [...new Set(pushes.map(e => e.id))];
+  const leftThis = open_.filter(i => i.due && inWeek(parse(i.due), today(), we));
+  const next = open_.filter(i => i.due && inWeek(parse(i.due), nws, nwe)).sort((a, b) => a.due < b.due ? -1 : 1);
+  let nextH = 0; open_.forEach(i => (i.plan || []).forEach(p => { const d = parse(p.date); if (inWeek(d, nws, nwe)) nextH += +p.hours || 0; }));
+  const perDay = []; let maxD = 1;
+  for (let k = 0; k < 7; k++) { const d = new Date(ws); d.setDate(d.getDate() + k); const e = new Date(d); e.setDate(e.getDate() + 1); const c = done.filter(i => inWeek(new Date(i.doneAt), d, e)).length; perDay.push([d, c]); maxD = Math.max(maxD, c); }
+  const cats = {}; done.forEach(i => { cats[i.category || "other"] = (cats[i.category || "other"] || 0) + 1; });
+  const rng = ws.toLocaleDateString(LOC, {month:"short", day:"numeric"}) + " – " + new Date(we - 864e5).toLocaleDateString(LOC, {month:"short", day:"numeric"});
+  let h = '<div class="rv-top"><div><h2 id="rv-title">' + esc(L("Your week", "이번 주 리뷰")) + '</h2><div class="sub">' + esc(rng) + '</div></div><button type="button" class="rv-x" id="rv-close">' + esc(L("Close", "닫기")) + "</button></div>";
+  h += '<div class="rv-stats"><div class="rv-stat hero1"><b>' + done.length + "</b><span>" + esc(L("done", "완료")) + '</span></div><div class="rv-stat"><b>' + leftThis.length + "</b><span>" + esc(L("still due this week", "이번 주 남은 마감")) + '</span></div><div class="rv-stat' + (slipped.length ? " warn" : "") + '"><b>' + slipped.length + "</b><span>" + esc(L("overdue", "기한 지남")) + '</span></div><div class="rv-stat"><b>' + pushedIds.length + "</b><span>" + esc(L("pushed back (this phone)", "미룬 일 (이 폰)")) + "</span></div></div>";
+  h += '<div class="hd">' + esc(L("Done by day", "요일별 완료")) + '</div><div class="rv-bars">' + perDay.map(([d, c]) => '<div class="' + (iso(d) === iso(today()) ? "today" : "") + '"><span class="l">' + d.toLocaleDateString(LOC, {weekday:"short"}).slice(0, 2) + '</span><div class="bar"><i style="height:' + Math.round(c / Math.max(maxD, 3) * 100) + '%"></i></div><span class="n">' + (c || "–") + "</span></div>").join("") + "</div>";
+  if (done.length) h += '<div class="hd">' + esc(L("Where it went", "어디에 썼나")) + '</div><div class="rv-cats">' + Object.entries(cats).sort((a, b) => b[1] - a[1]).map(([c, n]) => '<span style="--cat:' + (CAT[c] || CAT.other) + '">' + icon(c) + esc(catName(c)) + " " + n + "</span>").join("") + "</div>";
+  if (slipped.length) h += group(L("Overdue", "기한 지남"), slipped.map(i => rowHtml(i)).join(""));
+  if (leftThis.length) h += group(L("Left this week", "이번 주 남은 것"), leftThis.sort((a, b) => a.due < b.due ? -1 : 1).map(i => rowHtml(i)).join(""));
+  h += group(L("Next week", "다음 주"), next.length ? next.map(i => rowHtml(i)).join("") : '<div class="empty">' + esc(L("Nothing due yet.", "아직 마감이 없어요.")) + "</div>", nextH ? hrs(nextH) + L(" planned", " 계획") : "");
+  if (done.length) h += '<details class="later"><summary class="hd">' + esc(L("Everything you finished", "끝낸 일 전체")) + '<span class="x">' + done.length + " ›</span></summary>" + '<div class="group">' + done.sort((a, b) => a.doneAt < b.doneAt ? 1 : -1).map(i => rowHtml(i)).join("") + "</div></details>";
+  h += '<div class="rv-note">' + esc(L("Pushed-back counts only include swipes on this phone.", "미룬 일 수는 이 폰에서 스와이프한 것만 세요.")) + "</div>";
+  $("rv-in").innerHTML = h; $("review").hidden = false; $("review").scrollTop = 0;
+  $("rv-close").onclick = () => { $("review").hidden = true; };
+}
+
+/* focus alert via timer repo */
+const TIMER_REPO = "Jihee1027/career-tracker-timer";
+let timerSha = null;
+async function timerPut(obj){
+  if (!token) return false;
+  const url = "https://api.github.com/repos/" + TIMER_REPO + "/contents/timer.json";
+  const H = {"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json"};
+  for (let k = 0; k < 2; k++) {
+    try {
+      if (!timerSha) { const g = await fetch(url + "?t=" + Date.now(), {headers: H, cache: "no-store"}); if (g.ok) timerSha = (await g.json()).sha; else if (g.status !== 404) { kvSet("timerOk", false); return false; } }
+      const r = await fetch(url, {method: "PUT", headers: H, body: JSON.stringify({message: obj.endAt ? "Focus timer" : "Focus timer off", content: btoa(JSON.stringify(obj)), sha: timerSha || undefined})});
+      if (r.ok) { timerSha = (await r.json()).content.sha; kvSet("timerOk", true); return true; }
+      if (r.status === 409 || r.status === 422) { timerSha = null; continue; }
+      kvSet("timerOk", false); return false;
+    } catch (_) { return false; }
+  }
+  return false;
+}
+async function timerSync(){
+  const on = FS && FS.endAt;
+  const ok = await timerPut(on ? {endAt: new Date(FS.endAt).toISOString(), mins: Math.round(FS.dur / 60e3)} : {endAt: null});
+  if (on) $("f-note").textContent = ok ? L("You'll get a notification when time's up, even if the app is closed.", "앱을 닫아도 시간이 끝나면 알림이 와요.") : L("Keep the app open to hear when time's up. Phone alerts need setup in Settings.", "시간 끝을 알려면 앱을 열어 두세요. 폰 알림은 설정에서 연결할 수 있어요.");
+}
+
+$("review").addEventListener("click", async e => { if (await onRing(e)) { const y = $("review").scrollTop; openReview(); $("review").scrollTop = y; } });
+
 /* tabs */
 function setTab(t){
   window.scrollTo(0, 0);
@@ -908,20 +1051,20 @@ function fsRender(){
 $("f-go").addEventListener("click", () => {
   if (FS.endAt) { FS.rem = fsRem(); FS.endAt = null; relWake(); }
   else { if (FS.rem <= 0) FS.rem = FS.dur; FS.endAt = Date.now() + FS.rem; reqWake(); }
-  fsSave(); fsRender();
+  fsSave(); fsRender(); timerSync();
 });
 function fsAdj(d){
   const nr = Math.max(60e3, Math.min(180 * 60e3, fsRem() + d));
   if (FS.endAt) FS.endAt = Date.now() + nr; else FS.rem = nr;
   FS.dur = Math.max(nr, Math.min(180 * 60e3, FS.dur + d));
-  fsSave(); fsRender();
+  fsSave(); fsRender(); if (FS.endAt) timerSync();
 }
 $("f-minus").addEventListener("click", () => fsAdj(-5 * 60e3));
 $("f-plus").addEventListener("click", () => fsAdj(5 * 60e3));
-$("f-reset").addEventListener("click", () => { FS.endAt = null; FS.rem = FS.dur; relWake(); fsSave(); fsRender(); });
+$("f-reset").addEventListener("click", () => { const was = !!FS.endAt; FS.endAt = null; FS.rem = FS.dur; relWake(); fsSave(); fsRender(); $("f-note").textContent = ""; if (was) timerSync(); });
 $("f-close").addEventListener("click", () => { $("focus").hidden = true; if (!FS.endAt && FS.rem >= FS.dur) { FS = null; fsSave(); relWake(); } fsRender(); });
 $("f-done").addEventListener("click", async () => {
-  const it = items.find(i => i.id === FS.id); $("focus").hidden = true; relWake(); FS = null; fsSave(); fsRender();
+  const it = items.find(i => i.id === FS.id); const was = !!FS.endAt; $("focus").hidden = true; relWake(); FS = null; fsSave(); fsRender(); if (was) timerPut({endAt: null});
   if (it && it.status !== "done") await complete(it, null, true);
 });
 $("fpill").addEventListener("click", () => { $("focus").hidden = false; fsRender(); fsLoop(); });
