@@ -100,7 +100,7 @@ ol{margin:0;padding-left:20px;color:var(--sub);font-size:15px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:90vw;z-index:9}
 .foot{margin-top:24px;text-align:center}
 .foot button{font:inherit;font-size:15px;border:0;background:transparent;color:var(--accent);cursor:pointer}
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:8;display:grid;grid-template-columns:repeat(3,1fr);
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:8;display:grid;grid-template-columns:repeat(4,1fr);
  padding:6px max(10px,env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
  background:color-mix(in srgb,var(--group) 82%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:.5px solid var(--sep)}
 .tabbar button{font:inherit;border:0;background:transparent;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;cursor:pointer;position:relative;font-size:10.5px;font-weight:500}
@@ -171,7 +171,8 @@ section{animation:fade .18s ease-out}
     <div class="group" id="alert-list"></div>
   </section>
 
-  <div id="settings" hidden>
+  <section id="settings" hidden>
+    <div class="hd">Settings</div>
     <div class="card" id="enable">
       <h3>Notifications</h3>
       <div class="note" id="enable-status">If notifications stop, turn them on again here and send the new code to Claude.</div>
@@ -186,14 +187,19 @@ section{animation:fade .18s ease-out}
       <button class="btn" id="tok-save" type="button">Save token</button>
       <button class="btn danger" id="tok-remove" type="button" hidden>Remove token</button>
     </div>
-  </div>
+    <div class="card">
+      <h3>About</h3>
+      <div class="note">Plan and Calendar refresh at 7:31 AM, 8:58 PM and after each sync. Edits you make here sync to the full tracker every two hours from 10 AM to 10 PM.</div>
+      <a class="btn plain" href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">Open full tracker</a>
+    </div>
+  </section>
 
-  <div class="foot"><button type="button" id="btn-relink">Settings</button></div>
   <div class="toast" id="toast" hidden></div>
 </div>
 <nav class="tabbar" aria-label="View">
   <button type="button" id="tab-plan" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="17.5" r="1.3" fill="currentColor" stroke="none"/><path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/></svg>Plan</button>
   <button type="button" id="tab-cal" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><circle cx="8.5" cy="14" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1.1" fill="currentColor" stroke="none"/></svg>Calendar</button>
+  <button type="button" id="tab-set" aria-pressed="false" style="order:4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings<span class="badge" id="setbadge" hidden>!</span></button>
   <button type="button" id="tab-alerts" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>Alerts<span class="badge" id="badge" hidden></span></button>
 </nav>
 <script>
@@ -468,13 +474,15 @@ $("nextm").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; 
 $("todaybtn").addEventListener("click", () => { calY = today().getFullYear(); calM = today().getMonth(); selDay = iso(today()); renderCal(); });
 function setTab(t){
   window.scrollTo(0, 0);
-  $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts"; $("calsec").hidden = t !== "cal"; $("addsec").hidden = t !== "plan" || !token;
+  $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts"; $("calsec").hidden = t !== "cal"; $("settings").hidden = t !== "set"; $("addsec").hidden = t !== "plan" || !token;
+  $("tab-set").setAttribute("aria-pressed", t === "set");
   $("tab-plan").setAttribute("aria-pressed", t === "plan"); $("tab-alerts").setAttribute("aria-pressed", t === "alerts"); $("tab-cal").setAttribute("aria-pressed", t === "cal");
   if (t === "alerts") markSeen();
 }
 $("tab-plan").addEventListener("click", () => setTab("plan"));
 $("tab-alerts").addEventListener("click", () => setTab("alerts"));
 $("tab-cal").addEventListener("click", () => setTab("cal"));
+$("tab-set").addEventListener("click", () => setTab("set"));
 
 /* notifications */
 function u8(s){ return b64(s); }
@@ -483,7 +491,8 @@ async function checkEnable(){
   if (isIOS && !standalone) { $("install").hidden = false; return; }
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
   const r = await getReg(); const s = await r.pushManager.getSubscription();
-  if (!s || Notification.permission !== "granted") { $("settings").hidden = false; $("enable-status").textContent = "Turn on notifications so morning and evening briefs reach this phone."; }
+  if (!s || Notification.permission !== "granted") { $("setbadge").hidden = false; $("enable-status").textContent = "Turn on notifications so morning and evening briefs reach this phone."; }
+  else { $("btn-enable").textContent = "Notifications are on"; }
 }
 $("btn-enable").addEventListener("click", async () => {
   try {
@@ -496,7 +505,7 @@ $("btn-enable").addEventListener("click", async () => {
   } catch (e) { $("enable-status").textContent = "Couldn't turn on notifications: " + (e && e.message ? e.message : e); }
 });
 $("btn-copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("code").value); $("btn-copy").textContent = "Copied"; } catch (e) { $("code").select(); $("btn-copy").textContent = "Selected. Long-press to copy"; } });
-$("btn-relink").addEventListener("click", () => { $("settings").hidden = !$("settings").hidden; if (!$("settings").hidden) $("settings").scrollIntoView({behavior:"smooth"}); });
+
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", e => {
   if (!e.data) return;
