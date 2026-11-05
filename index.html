@@ -76,6 +76,19 @@ ol{margin:0;padding-left:20px;color:var(--muted)}
 .dot.blk{background:transparent;border:1.5px solid var(--cat)}
 .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-top:8px}
 .legend .k::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--cat);margin-right:5px}
+.ed{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.ed button,.ed input,.addf input,.addf select,.set input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--bg);color:var(--ink)}
+.ed button{background:var(--accent);color:var(--accent-ink);border:0;font-weight:600;cursor:pointer}
+.ed button.sec{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.row.done .t{text-decoration:line-through;color:var(--muted)}
+.row.pend .t::after{content:" · syncing";font-weight:400;font-size:12px;color:var(--muted)}
+.addbar{display:flex;justify-content:flex-end}
+.addbar button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--accent);border-radius:8px;padding:6px 12px;cursor:pointer}
+.addf{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.addf input[type=text]{grid-column:1/-1}
+.addf button{grid-column:1/-1}
+.set input{width:100%}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:9px;font-size:14px;max-width:90vw;z-index:9}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -102,12 +115,31 @@ ol{margin:0;padding-left:20px;color:var(--muted)}
     <button class="btn" id="btn-copy" type="button" hidden>Copy code</button>
   </div>
 
+  <div class="card set" id="settings" hidden>
+    <h3>Editing from this app</h3>
+    <div class="muted" id="tok-status">Paste your GitHub token to edit from the app. Edits sync to the tracker within a few hours.</div>
+    <input type="password" id="tok" placeholder="github_pat_..." autocomplete="off" aria-label="GitHub token">
+    <button class="btn" id="tok-save" type="button">Save token</button>
+    <button class="btn ghost" id="tok-remove" type="button" hidden>Remove token</button>
+  </div>
+
   <div class="tabs" role="group" aria-label="View">
     <button type="button" id="tab-plan" aria-pressed="true">Plan</button>
     <button type="button" id="tab-cal" aria-pressed="false">Calendar</button>
     <button type="button" id="tab-alerts" aria-pressed="false">Alerts<span class="badge" id="badge" hidden></span></button>
   </div>
 
+  <div class="toast" id="toast" hidden></div>
+  <div class="addbar" id="addbar" hidden><button type="button" id="btn-add">+ Add task</button></div>
+  <div class="card" id="addcard" hidden>
+    <h3>New task</h3>
+    <form class="addf" id="addform" autocomplete="off">
+      <input type="text" id="add-title" placeholder="What needs doing?" aria-label="Title" required>
+      <select id="add-cat" aria-label="Category"><option value="school">School</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="admin">Admin</option><option value="other">Other</option></select>
+      <input type="date" id="add-due" aria-label="Due date">
+      <button class="btn" type="submit">Add</button>
+    </form>
+  </div>
   <section id="plan"></section>
 
   <section id="calsec" hidden>
@@ -123,7 +155,7 @@ ol{margin:0;padding-left:20px;color:var(--muted)}
     <button class="btn ghost" id="btn-clear" type="button" hidden>Clear alerts</button>
   </section>
 
-  <button class="btn ghost" id="btn-relink" type="button">Notification settings</button>
+  <button class="btn ghost" id="btn-relink" type="button">Settings</button>
 </div>
 
 <script>
@@ -134,7 +166,8 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const standalone = navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
 const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-let reg = null, items = [], open = null;
+let reg = null, items = [], open = null, snap = null, token = null;
+const REPO = "Jihee1027/career-tracker-push";
 
 /* dates */
 const sod = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -156,6 +189,84 @@ async function kvSet(k, v){ const d = await openDb(); return new Promise(res => 
 async function allAlerts(){ const d = await openDb(); return new Promise(res => { const q = d.transaction("alerts").objectStore("alerts").getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); }
 async function clearAlerts(){ const d = await openDb(); return new Promise(res => { const t = d.transaction("alerts","readwrite"); t.objectStore("alerts").clear(); t.oncomplete = () => res(); t.onerror = () => res(); }); }
 
+/* edits */
+function toast(m){ const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => t.hidden = true, 3000); }
+async function getPending(){ return (await kvGet("pending")) || []; }
+async function merged(){
+  const base = (snap && snap.items ? snap.items : []).map(i => Object.assign({}, i));
+  const since = snap ? Date.parse(snap.updatedAt) : 0;
+  let pend = await getPending();
+  const keep = pend.filter(e => !e.sent || Date.parse(e.at) > since);
+  if (keep.length !== pend.length) { await kvSet("pending", keep); }
+  keep.forEach(e => {
+    if (e.op === "add") base.push(Object.assign({id: e.id, status: "todo", kind: "task", _pend: true}, e.fields));
+    else { const it = base.find(i => i.id === e.id); if (it) { Object.assign(it, e.fields); it._pend = true; } }
+  });
+  return base;
+}
+async function pushEdit(e){
+  if (!token) return false;
+  const name = "inbox/" + e.at.replace(/[:.]/g, "-") + "-" + e.eid + ".json";
+  const body = JSON.stringify(e, null, 1);
+  try {
+    const r = await fetch("https://api.github.com/repos/" + REPO + "/contents/" + name, {
+      method: "PUT",
+      headers: {"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json"},
+      body: JSON.stringify({message: "App edit", content: btoa(unescape(encodeURIComponent(body)))})
+    });
+    return r.status === 201 || r.status === 200;
+  } catch (_) { return false; }
+}
+async function flush(){
+  const pend = await getPending(); let changed = false;
+  for (const e of pend) { if (!e.sent && await pushEdit(e)) { e.sent = true; changed = true; } }
+  if (changed) await kvSet("pending", pend);
+  return pend.filter(e => !e.sent).length;
+}
+async function edit(op, id, fields){
+  const e = {eid: Math.random().toString(36).slice(2, 10), at: new Date().toISOString(), op, id, fields, sent: false};
+  if (op === "add") e.id = "app-" + e.eid;
+  const pend = await getPending(); pend.push(e); await kvSet("pending", pend);
+  items = await merged(); renderPlan(items); renderCal();
+  const left = await flush();
+  toast(left ? "Saved on this phone. Will send when online." : "Saved. Syncs to the tracker soon.");
+}
+function editHtml(it){
+  if (!token) return "";
+  const done = it.status === "done";
+  return '<div class="ed" data-id="' + esc(it.id) + '">'
+    + '<button type="button" data-ed="toggle">' + (done ? "Reopen" : "Mark done") + "</button>"
+    + '<input type="date" data-ed="due" value="' + esc(it.due || "") + '" aria-label="Due date">'
+    + '<button type="button" class="sec" data-ed="savedue">Save date</button></div>';
+}
+async function onEdit(e){
+  const box = e.target.closest(".ed"); if (!box) return false;
+  const b = e.target.closest("[data-ed]"); if (!b || b.tagName === "INPUT") return true;
+  const id = box.getAttribute("data-id"), it = items.find(i => i.id === id); if (!it) return true;
+  if (b.dataset.ed === "toggle") await edit("update", id, it.status === "done" ? {status: "todo"} : {status: "done", doneAt: new Date().toISOString()});
+  if (b.dataset.ed === "savedue") { const v = box.querySelector('[data-ed="due"]').value; await edit("update", id, {due: v}); }
+  return true;
+}
+async function loadToken(){
+  token = await kvGet("ghToken").catch(() => null);
+  $("addbar").hidden = !token;
+  $("tok-remove").hidden = !token;
+  $("tok-status").textContent = token ? "Editing is on. Edits sync to the tracker within a few hours." : "Paste your GitHub token to edit from the app. Edits sync to the tracker within a few hours.";
+}
+$("tok-save").addEventListener("click", async () => {
+  const v = $("tok").value.trim(); if (!v) return;
+  const r = await fetch("https://api.github.com/repos/" + REPO, {headers: {"Authorization": "Bearer " + v, "Accept": "application/vnd.github+json"}}).catch(() => null);
+  if (!r || !r.ok) { $("tok-status").textContent = "That token couldn't open career-tracker-push. Check the repository and Contents permission."; return; }
+  await kvSet("ghToken", v); $("tok").value = ""; await loadToken(); renderPlan(items); renderCal(); flush(); toast("Editing is on.");
+});
+$("tok-remove").addEventListener("click", async () => { await kvSet("ghToken", null); await loadToken(); renderPlan(items); renderCal(); });
+$("btn-add").addEventListener("click", () => { $("addcard").hidden = !$("addcard").hidden; if (!$("addcard").hidden) $("add-title").focus(); });
+$("addform").addEventListener("submit", async ev => {
+  ev.preventDefault(); const title = $("add-title").value.trim(); if (!title) return;
+  await edit("add", null, {title, category: $("add-cat").value, due: $("add-due").value || "", createdAt: new Date().toISOString()});
+  $("add-title").value = ""; $("add-due").value = ""; $("addcard").hidden = true;
+});
+
 /* data */
 function b64(s){ s = s.replace(/-/g,"+").replace(/_/g,"/"); s += "=".repeat((4 - s.length % 4) % 4); return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
 async function loadData(){
@@ -168,7 +279,8 @@ async function loadData(){
     const k = await crypto.subtle.importKey("raw", b64(key), "AES-GCM", false, ["decrypt"]);
     const plain = await crypto.subtle.decrypt({name:"AES-GCM", iv:b64(enc.iv)}, k, b64(enc.ct));
     const data = JSON.parse(new TextDecoder().decode(plain));
-    items = data.items || [];
+    snap = data;
+    items = await merged();
     const u = new Date(data.updatedAt);
     $("updated").textContent = "Updated " + u.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
     renderPlan(items); renderCal();
@@ -184,11 +296,12 @@ function rowHtml(it, extra, blk){
   if (it.effort) meta.push("~" + hrs(it.effort));
   let start = "";
   if (it.status !== "done" && it.startBy && !blk) start = days(it.startBy) <= 0 ? '<span class="start">Start now</span>' : "<span>Start by " + esc(fmt(it.startBy)) + "</span>";
-  return '<div class="row' + (blk ? " blk" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(it.id + (blk ? "@" + blk : "")) + '">'
+  return '<div class="row' + (blk ? " blk" : "") + (it.status === "done" ? " done" : "") + (it._pend ? " pend" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(it.id + (blk ? "@" + blk : "")) + '">'
     + '<div class="t">' + (blk ? "▸ " : "") + esc(it.title) + (extra ? " · " + esc(extra) : "") + '</div>'
     + '<div class="m">' + meta.map(x => "<span>" + esc(x) + "</span>").join("") + start
     + (n !== null && it.status !== "done" && !blk ? '<span class="pill ' + tone(n) + '">' + esc(left(n)) + "</span>" : "") + "</div>"
     + (isOpen && it.notes ? '<div class="n">' + esc(it.notes) + "</div>" : "")
+    + (isOpen ? editHtml(it) : "")
     + "</div>";
 }
 
@@ -237,7 +350,7 @@ function renderPlan(list, msg){
   $("plan").innerHTML = h;
 }
 
-$("plan").addEventListener("click", e => { const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
+$("plan").addEventListener("click", async e => { if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
 
 /* alerts */
 let clearArmed = false;
@@ -280,7 +393,7 @@ function renderCal(){
   $("daylist").innerHTML = (due.length || bl.length) ? due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), selDay)).join("") : '<div class="empty">Nothing due or planned.</div>';
 }
 $("cal").addEventListener("click", e => { const c = e.target.closest(".cell"); if (!c) return; selDay = c.getAttribute("data-date"); open = null; renderCal(); });
-$("daylist").addEventListener("click", e => { const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderCal(); });
+$("daylist").addEventListener("click", async e => { if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderCal(); });
 $("prevm").addEventListener("click", () => { calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); });
 $("nextm").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
 $("todaybtn").addEventListener("click", () => { calY = today().getFullYear(); calM = today().getMonth(); selDay = iso(today()); renderCal(); });
@@ -313,7 +426,7 @@ $("btn-enable").addEventListener("click", async () => {
   } catch (e) { $("enable-status").textContent = "Couldn't turn on notifications: " + (e && e.message ? e.message : e); }
 });
 $("btn-copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("code").value); $("btn-copy").textContent = "Copied"; } catch (e) { $("code").select(); $("btn-copy").textContent = "Selected. Long-press to copy"; } });
-$("btn-relink").addEventListener("click", () => { $("enable").hidden = !$("enable").hidden; });
+$("btn-relink").addEventListener("click", () => { const show = $("settings").hidden; $("settings").hidden = !show; $("enable").hidden = !show; });
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", e => {
   if (!e.data) return;
@@ -325,7 +438,7 @@ document.addEventListener("visibilitychange", () => { if (!document.hidden) { lo
 (async () => {
   try { await getReg(); } catch (e) {}
   setTab(location.hash === "#alerts" ? "alerts" : "plan");
-  checkEnable(); renderAlerts(); loadData();
+  await loadToken(); checkEnable(); renderAlerts(); await loadData(); flush();
 })();
 </script>
 </body>
