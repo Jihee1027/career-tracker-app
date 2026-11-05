@@ -9,155 +9,166 @@
 <link rel="icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Tracker">
-<meta name="theme-color" content="#0E6B8A">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
-:root{--bg:#F2F4F6;--surface:#fff;--ink:#16212B;--muted:#5B6877;--line:#DCE1E7;--accent:#0E6B8A;--accent-ink:#fff;--soft:#E4F0F4;
---hot:#B93815;--hot-bg:#FCE8E1;--warm:#8A5A00;--warm-bg:#FBF0D5;--ok:#1E7A4A;
---c-interview:#0E6B8A;--c-offer:#7A4FB5;--c-school:#2F7D3B;--c-admin:#A35A12;--c-other:#66727F}
-@media (prefers-color-scheme: dark){:root{--bg:#0F161C;--surface:#17212A;--ink:#E7EDF2;--muted:#9AA8B6;--line:#28343F;--accent:#5BB8D6;--accent-ink:#07202A;--soft:#16303A;
---hot:#FF9A78;--hot-bg:#3A1E15;--warm:#F2C14E;--warm-bg:#33280F;--ok:#6FD39B;
---c-interview:#5BB8D6;--c-offer:#B79BE8;--c-school:#7CCB86;--c-admin:#E7A55B;--c-other:#A3B0BD;color-scheme:dark}}
+:root{--bg:#F2F2F7;--group:#FFFFFF;--ink:#111418;--sub:#6C7480;--sep:rgba(60,60,67,.16);--fill:rgba(118,118,128,.12);
+--accent:#0E6B8A;--accent-ink:#FFFFFF;--red:#D7372B;--orange:#B86200;--green:#2E7D46;
+--c-interview:#0E7FA8;--c-offer:#7B54C0;--c-school:#2E8B4A;--c-admin:#C26A12;--c-other:#8A939E}
+@media (prefers-color-scheme: dark){:root{--bg:#000000;--group:#1C1C1E;--ink:#F2F2F7;--sub:#9A9FA8;--sep:rgba(84,84,88,.55);--fill:rgba(118,118,128,.24);
+--accent:#5BB8D6;--accent-ink:#04202A;--red:#FF6B5E;--orange:#FFB340;--green:#5FD38A;
+--c-interview:#5BC3E6;--c-offer:#BFA2F0;--c-school:#73D08E;--c-admin:#F0AC5E;--c-other:#A6AEB8;color-scheme:dark}}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink)}
-body{font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
- padding:calc(14px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
-.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
-.head{display:flex;align-items:center;gap:12px}
-.head img{width:44px;height:44px;border-radius:11px}
-.head h1{margin:0;font-size:21px;letter-spacing:-.01em;line-height:1.1}
-.head .sub{font-size:12.5px;color:var(--muted)}
-.head .grow{flex:1;min-width:0}
-.edit{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--surface)}
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
-.tabs button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:8px;background:transparent;color:var(--muted);cursor:pointer}
-.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-.badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:99px;background:var(--hot);color:#fff;font-size:11px;line-height:18px}
-h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:6px 0 6px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
-.card h3{margin:0;font-size:15px}
-.muted{color:var(--muted);font-size:13.5px}
-.keys{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
-.key{flex:0 0 auto;width:170px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--cat);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
-.key .what{font-weight:600;font-size:14px;line-height:1.25}
-.key .when{font-size:12px;color:var(--muted)}
-.pill{align-self:flex-start;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--accent)}
-.pill.hot{background:var(--hot-bg);color:var(--hot)}.pill.warm{background:var(--warm-bg);color:var(--warm)}
-.list{display:flex;flex-direction:column;gap:6px}
-.row{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--cat);border-radius:9px;padding:9px 12px;cursor:pointer}
-.row.blk{border-style:dashed;border-left-style:solid}
-.row .t{font-weight:600;font-size:14.5px;line-height:1.3}
-.row .m{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:2px}
-.row .n{font-size:13px;color:var(--muted);white-space:pre-line;margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
-.start{color:var(--warm);font-weight:600}
-.day{font-size:13px;font-weight:700;margin:10px 0 4px}
-.alert{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
-.alert .at{font-size:12px;color:var(--muted)}
-.alert .t{font-weight:600;margin:2px 0}
-.alert .b{white-space:pre-line;font-size:14px}
-button.btn,a.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:11px 14px;background:var(--accent);color:var(--accent-ink);cursor:pointer;text-align:center;text-decoration:none;display:block}
-button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
-textarea{width:100%;min-height:90px;font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
-ol{margin:0;padding-left:20px;color:var(--muted)}
-.empty{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--muted);font-size:14px}
-.calhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px}
-.calhead .mo{font-weight:700;font-size:17px}
-.calhead button{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;width:36px;height:34px;cursor:pointer}
-.calhead .today-btn{width:auto;padding:0 10px;font-size:13px;font-weight:600;color:var(--accent)}
-.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.dow{background:var(--surface);font-size:10.5px;color:var(--muted);text-align:center;padding:5px 0;text-transform:uppercase;letter-spacing:.05em}
-.cell{background:var(--surface);min-height:58px;padding:4px;display:flex;flex-direction:column;gap:3px;cursor:pointer;min-width:0}
-.cell.out{background:var(--bg)}.cell.out .num{color:var(--muted)}
-.cell .num{font-size:12px;width:22px;height:22px;display:grid;place-items:center;border-radius:50%}
-.cell.today .num{background:var(--accent);color:var(--accent-ink);font-weight:700}
-.cell.sel{box-shadow:inset 0 0 0 2px var(--accent)}
-.dots{display:flex;flex-wrap:wrap;gap:3px;padding-left:2px}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--cat)}
-.dot.ms{width:9px;height:9px;border-radius:2px}
-.dot.blk{background:transparent;border:1.5px solid var(--cat)}
-.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-top:8px}
-.legend .k::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--cat);margin-right:5px}
-.ed{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
-.ed button,.ed input,.addf input,.addf select,.set input{font:inherit;font-size:14px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--bg);color:var(--ink)}
-.ed button{background:var(--accent);color:var(--accent-ink);border:0;font-weight:600;cursor:pointer}
-.ed button.sec{background:transparent;color:var(--accent);border:1px solid var(--line)}
-.row.done .t{text-decoration:line-through;color:var(--muted)}
-.row.pend .t::after{content:" · syncing";font-weight:400;font-size:12px;color:var(--muted)}
-.addbar{display:flex;justify-content:flex-end}
-.addbar button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--accent);border-radius:8px;padding:6px 12px;cursor:pointer}
-.addf{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.addf input[type=text]{grid-column:1/-1}
-.addf button{grid-column:1/-1}
-.set input{width:100%}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:9px;font-size:14px;max-width:90vw;z-index:9}
+body{font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;
+ padding:calc(10px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(36px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.wrap{max-width:600px;margin:0 auto}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:8px 4px 14px}
+.top h1{margin:0;font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.05}
+.top .sub{font-size:14px;color:var(--sub);margin-top:4px}
+.top a{color:var(--accent);text-decoration:none;font-size:16px;font-weight:500;padding:4px 0}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--fill);border-radius:9px;padding:2px;margin:0 0 6px}
+.seg button{font:inherit;font-size:14px;font-weight:500;border:0;border-radius:7px;padding:6px 4px;background:transparent;color:var(--ink);cursor:pointer;position:relative}
+.seg button[aria-pressed="true"]{background:var(--group);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.badge{display:inline-block;min-width:17px;padding:0 5px;margin-left:5px;border-radius:99px;background:var(--red);color:#fff;font-size:11px;font-weight:600;line-height:17px}
+.hd{font-size:13px;color:var(--sub);text-transform:uppercase;letter-spacing:.02em;margin:22px 16px 7px;display:flex;justify-content:space-between}
+.hd .x{text-transform:none;letter-spacing:0}
+.group{background:var(--group);border-radius:12px;overflow:hidden}
+.row{display:grid;grid-template-columns:10px minmax(0,1fr) auto;column-gap:12px;align-items:center;padding:11px 16px;position:relative;cursor:pointer}
+.row + .row::before,.group > * + .row::before{content:"";position:absolute;top:0;left:38px;right:0;border-top:.5px solid var(--sep)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--cat)}
+.dot.ms{border-radius:2.5px}
+.dot.blk{background:transparent;border:1.6px solid var(--cat)}
+.t{font-size:16px;font-weight:500;line-height:1.3;overflow-wrap:anywhere}
+.row.done .t{color:var(--sub);text-decoration:line-through;font-weight:400}
+.m{font-size:13.5px;color:var(--sub);margin-top:1px}
+.m .now{color:var(--orange);font-weight:600}
+.m .sync{color:var(--accent)}
+.r{font-size:14px;color:var(--sub);white-space:nowrap;font-variant-numeric:tabular-nums}
+.r.red{color:var(--red);font-weight:600}.r.orange{color:var(--orange);font-weight:600}
+.more{grid-column:2 / -1;margin-top:8px;display:flex;flex-direction:column;gap:8px}
+.n{font-size:14px;color:var(--sub);white-space:pre-line}
+.ed{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ed button,.ed input{font:inherit;font-size:14px;border-radius:8px;padding:6px 11px}
+.ed button{border:0;background:var(--accent);color:var(--accent-ink);font-weight:600;cursor:pointer}
+.ed button.sec{background:var(--fill);color:var(--ink)}
+.ed input{border:0;background:var(--fill);color:var(--ink)}
+.key{display:grid;grid-template-columns:54px minmax(0,1fr);column-gap:12px;align-items:center;padding:11px 16px;position:relative}
+.key + .key::before{content:"";position:absolute;top:0;left:82px;right:0;border-top:.5px solid var(--sep)}
+.key .big{font-size:22px;font-weight:700;line-height:1;text-align:center;font-variant-numeric:tabular-nums;color:var(--ink)}
+.key .big small{display:block;font-size:11px;font-weight:500;color:var(--sub);margin-top:3px}
+.key .big.red{color:var(--red)}.key .big.orange{color:var(--orange)}
+.empty{padding:13px 16px;color:var(--sub);font-size:15px}
+.addrow{display:flex;align-items:center;gap:10px;padding:12px 16px;color:var(--accent);font-weight:500;cursor:pointer}
+.addf{display:flex;flex-direction:column}
+.addf input,.addf select{font:inherit;border:0;background:transparent;color:var(--ink);padding:12px 16px;border-top:.5px solid var(--sep);width:100%}
+.addf input:first-child{border-top:0}
+.addf .actions{display:flex;justify-content:flex-end;gap:8px;padding:10px 12px;border-top:.5px solid var(--sep)}
+.btn{font:inherit;font-size:16px;font-weight:600;border:0;border-radius:12px;padding:12px 16px;background:var(--accent);color:var(--accent-ink);cursor:pointer;width:100%;display:block;text-align:center;text-decoration:none}
+.btn.small{width:auto;font-size:14px;padding:8px 14px;border-radius:9px}
+.btn.plain{background:transparent;color:var(--accent)}
+.btn.danger{background:transparent;color:var(--red)}
+.card{background:var(--group);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.card h3{margin:0;font-size:17px}
+.card .note{font-size:14px;color:var(--sub)}
+.card input,.card textarea{font:inherit;font-size:15px;border:0;border-radius:9px;background:var(--fill);color:var(--ink);padding:10px 12px;width:100%}
+.card textarea{min-height:80px;font:12px/1.4 ui-monospace,Menlo,monospace}
+ol{margin:0;padding-left:20px;color:var(--sub);font-size:15px}
+.calhead{display:flex;align-items:center;justify-content:space-between;margin:14px 4px 8px}
+.calhead .mo{font-size:20px;font-weight:700}
+.calhead .nav{display:flex;gap:4px}
+.calhead button{font:inherit;font-size:22px;line-height:1;border:0;background:transparent;color:var(--accent);padding:4px 10px;cursor:pointer}
+.calhead .tb{font-size:15px;font-weight:500}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:8px 6px 10px;row-gap:4px}
+.dow{font-size:11.5px;font-weight:600;color:var(--sub);text-align:center;padding:2px 0 6px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px 0 4px;cursor:pointer;min-width:0}
+.cell .num{font-size:16px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;font-variant-numeric:tabular-nums}
+.cell.out .num{color:var(--sub);opacity:.5}
+.cell.today .num{color:var(--red);font-weight:700}
+.cell.sel .num{background:var(--ink);color:var(--bg);font-weight:700}
+.cell.sel.today .num{background:var(--red);color:#fff}
+.dots{display:flex;gap:3px;height:6px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--cat);display:block}
+.dots i.blk{background:transparent;border:1.2px solid var(--cat);width:6px;height:6px}
+.alert{padding:12px 16px;position:relative}
+.alert + .alert::before{content:"";position:absolute;top:0;left:16px;right:0;border-top:.5px solid var(--sep)}
+.alert .h{display:flex;justify-content:space-between;gap:10px}
+.alert .h b{font-size:15px}
+.alert .h span{font-size:13px;color:var(--sub);white-space:nowrap}
+.alert .b{font-size:15px;white-space:pre-line;margin-top:3px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:90vw;z-index:9}
+.foot{margin-top:24px;text-align:center}
+.foot button{font:inherit;font-size:15px;border:0;background:transparent;color:var(--accent);cursor:pointer}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="head">
-    <img src="icon-192.png" alt="">
-    <div class="grow"><h1>Career Tracker</h1><div class="sub" id="updated">Loading…</div></div>
-    <a class="edit" href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">Edit ↗</a>
+  <div class="top">
+    <div><h1>Tracker</h1><div class="sub" id="updated">Loading…</div></div>
+    <a href="https://claude.ai/artifact/Hj2o6snf5KzLEMLBAbJSY8">Open full</a>
   </div>
 
   <div class="card" id="install" hidden>
-    <h3>Add this app to your Home Screen</h3>
-    <ol><li>Tap the Share button (□↑) in Safari.</li><li>Tap "Add to Home Screen".</li><li>Open Tracker from your Home Screen.</li></ol>
-    <div class="muted">On iPhone, notifications only work in the Home Screen app.</div>
+    <h3>Add to Home Screen</h3>
+    <ol><li>Tap Share (□↑) in Safari.</li><li>Tap "Add to Home Screen".</li><li>Open Tracker from your Home Screen.</li></ol>
+    <div class="note">On iPhone, notifications only work in the Home Screen app.</div>
   </div>
 
-  <div class="card" id="enable" hidden>
-    <h3>Turn on notifications</h3>
-    <div class="muted">Tap the button, choose Allow, then send the code that appears to Claude.</div>
-    <button class="btn" id="btn-enable" type="button">Turn on notifications</button>
-    <div class="muted" id="enable-status"></div>
-    <textarea id="code" readonly hidden aria-label="Connection code"></textarea>
-    <button class="btn" id="btn-copy" type="button" hidden>Copy code</button>
-  </div>
-
-  <div class="card set" id="settings" hidden>
-    <h3>Editing from this app</h3>
-    <div class="muted" id="tok-status">Paste your GitHub token to edit from the app. Edits sync to the tracker within a few hours.</div>
-    <input type="password" id="tok" placeholder="github_pat_..." autocomplete="off" aria-label="GitHub token">
-    <button class="btn" id="tok-save" type="button">Save token</button>
-    <button class="btn ghost" id="tok-remove" type="button" hidden>Remove token</button>
-  </div>
-
-  <div class="tabs" role="group" aria-label="View">
+  <div class="seg" role="group" aria-label="View">
     <button type="button" id="tab-plan" aria-pressed="true">Plan</button>
     <button type="button" id="tab-cal" aria-pressed="false">Calendar</button>
     <button type="button" id="tab-alerts" aria-pressed="false">Alerts<span class="badge" id="badge" hidden></span></button>
   </div>
 
-  <div class="toast" id="toast" hidden></div>
-  <div class="addbar" id="addbar" hidden><button type="button" id="btn-add">+ Add task</button></div>
-  <div class="card" id="addcard" hidden>
-    <h3>New task</h3>
-    <form class="addf" id="addform" autocomplete="off">
-      <input type="text" id="add-title" placeholder="What needs doing?" aria-label="Title" required>
-      <select id="add-cat" aria-label="Category"><option value="school">School</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="admin">Admin</option><option value="other">Other</option></select>
-      <input type="date" id="add-due" aria-label="Due date">
-      <button class="btn" type="submit">Add</button>
-    </form>
-  </div>
   <section id="plan"></section>
 
+  <section id="addsec" hidden>
+    <div class="hd">New task</div>
+    <div class="group">
+      <div class="addrow" id="btn-add" role="button" tabindex="0">＋ New task</div>
+      <form class="addf" id="addcard" autocomplete="off" hidden>
+        <input type="text" id="add-title" placeholder="Title" aria-label="Title" required>
+        <select id="add-cat" aria-label="Category"><option value="school">School</option><option value="interview">Interview</option><option value="offer">Offer</option><option value="admin">Admin</option><option value="other">Other</option></select>
+        <input type="date" id="add-due" aria-label="Due date">
+        <div class="actions"><button class="btn small plain" type="button" id="add-cancel">Cancel</button><button class="btn small" type="submit">Add</button></div>
+      </form>
+    </div>
+  </section>
+
   <section id="calsec" hidden>
-    <div class="calhead"><button type="button" id="prevm" aria-label="Previous month">&#8249;</button><span class="mo" id="monthname"></span><button type="button" id="nextm" aria-label="Next month">&#8250;</button><button type="button" class="today-btn" id="todaybtn">Today</button></div>
-    <div class="cal" id="cal"></div>
-    <div class="legend"><span class="k" style="--cat:var(--c-interview)">Interview</span><span class="k" style="--cat:var(--c-offer)">Offer</span><span class="k" style="--cat:var(--c-school)">School</span><span class="k" style="--cat:var(--c-admin)">Admin</span><span>&#9632; key date · &#9675; planned work</span></div>
-    <h2 id="dayhead"></h2>
-    <div class="list" id="daylist"></div>
+    <div class="calhead"><span class="mo" id="monthname"></span><div class="nav"><button type="button" id="prevm" aria-label="Previous month">‹</button><button type="button" class="tb" id="todaybtn">Today</button><button type="button" id="nextm" aria-label="Next month">›</button></div></div>
+    <div class="group"><div class="cal" id="cal"></div></div>
+    <div class="hd" id="dayhead"></div>
+    <div class="group" id="daylist"></div>
   </section>
 
   <section id="alerts" hidden>
-    <div class="list" id="alert-list"></div>
-    <button class="btn ghost" id="btn-clear" type="button" hidden>Clear alerts</button>
+    <div class="hd"><span>Received</span><span class="x"><button type="button" class="btn small danger" id="btn-clear" hidden>Clear</button></span></div>
+    <div class="group" id="alert-list"></div>
   </section>
 
-  <button class="btn ghost" id="btn-relink" type="button">Settings</button>
-</div>
+  <div id="settings" hidden>
+    <div class="card" id="enable">
+      <h3>Notifications</h3>
+      <div class="note" id="enable-status">If notifications stop, turn them on again here and send the new code to Claude.</div>
+      <button class="btn" id="btn-enable" type="button">Turn on notifications</button>
+      <textarea id="code" readonly hidden aria-label="Connection code"></textarea>
+      <button class="btn" id="btn-copy" type="button" hidden>Copy code</button>
+    </div>
+    <div class="card">
+      <h3>Editing</h3>
+      <div class="note" id="tok-status">Paste your GitHub token to edit from the app.</div>
+      <input type="password" id="tok" placeholder="github_pat_…" autocomplete="off" aria-label="GitHub token">
+      <button class="btn" id="tok-save" type="button">Save token</button>
+      <button class="btn danger" id="tok-remove" type="button" hidden>Remove token</button>
+    </div>
+  </div>
 
+  <div class="foot"><button type="button" id="btn-relink">Settings</button></div>
+  <div class="toast" id="toast" hidden></div>
+</div>
 <script>
 const VAPID_PUBLIC = "BKHZE6biucKuUFqKgfzA-se6DDNuaCS-AdMGZUd8p3TfHUgM3gHjdQSbjRSP6WHWZ74mcPIKXfs1xwPN7JUGLaQ";
 const CAT = {interview:"var(--c-interview)", offer:"var(--c-offer)", school:"var(--c-school)", admin:"var(--c-admin)", other:"var(--c-other)"};
@@ -249,7 +260,7 @@ async function onEdit(e){
 }
 async function loadToken(){
   token = await kvGet("ghToken").catch(() => null);
-  $("addbar").hidden = !token;
+  $("addsec").hidden = !token || $("plan").hidden;
   $("tok-remove").hidden = !token;
   $("tok-status").textContent = token ? "Editing is on. Edits sync to the tracker within a few hours." : "Paste your GitHub token to edit from the app. Edits sync to the tracker within a few hours.";
 }
@@ -260,11 +271,12 @@ $("tok-save").addEventListener("click", async () => {
   await kvSet("ghToken", v); $("tok").value = ""; await loadToken(); renderPlan(items); renderCal(); flush(); toast("Editing is on.");
 });
 $("tok-remove").addEventListener("click", async () => { await kvSet("ghToken", null); await loadToken(); renderPlan(items); renderCal(); });
-$("btn-add").addEventListener("click", () => { $("addcard").hidden = !$("addcard").hidden; if (!$("addcard").hidden) $("add-title").focus(); });
-$("addform").addEventListener("submit", async ev => {
+$("btn-add").addEventListener("click", () => { $("addcard").hidden = false; $("btn-add").hidden = true; $("add-title").focus(); });
+$("add-cancel").addEventListener("click", () => { $("addcard").hidden = true; $("btn-add").hidden = false; });
+$("addcard").addEventListener("submit", async ev => {
   ev.preventDefault(); const title = $("add-title").value.trim(); if (!title) return;
   await edit("add", null, {title, category: $("add-cat").value, due: $("add-due").value || "", createdAt: new Date().toISOString()});
-  $("add-title").value = ""; $("add-due").value = ""; $("addcard").hidden = true;
+  $("add-title").value = ""; $("add-due").value = ""; $("addcard").hidden = true; $("btn-add").hidden = false;
 });
 
 /* data */
@@ -282,7 +294,7 @@ async function loadData(){
     snap = data;
     items = await merged();
     const u = new Date(data.updatedAt);
-    $("updated").textContent = "Updated " + u.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+    $("updated").textContent = new Date().toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"}) + " · updated " + u.toLocaleString("en-US",{hour:"numeric",minute:"2-digit"});
     renderPlan(items); renderCal();
   } catch (e) {
     $("updated").textContent = "Couldn't load your plan";
@@ -291,63 +303,71 @@ async function loadData(){
 }
 
 function rowHtml(it, extra, blk){
-  const n = days(it.due), isOpen = open === it.id + (blk ? "@" + blk : "");
-  const meta = [CATN[it.category] || "Other", fmt(it.due) + (it.time ? " · " + it.time : "")];
-  if (it.effort) meta.push("~" + hrs(it.effort));
-  let start = "";
-  if (it.status !== "done" && it.startBy && !blk) start = days(it.startBy) <= 0 ? '<span class="start">Start now</span>' : "<span>Start by " + esc(fmt(it.startBy)) + "</span>";
-  return '<div class="row' + (blk ? " blk" : "") + (it.status === "done" ? " done" : "") + (it._pend ? " pend" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(it.id + (blk ? "@" + blk : "")) + '">'
-    + '<div class="t">' + (blk ? "▸ " : "") + esc(it.title) + (extra ? " · " + esc(extra) : "") + '</div>'
-    + '<div class="m">' + meta.map(x => "<span>" + esc(x) + "</span>").join("") + start
-    + (n !== null && it.status !== "done" && !blk ? '<span class="pill ' + tone(n) + '">' + esc(left(n)) + "</span>" : "") + "</div>"
-    + (isOpen && it.notes ? '<div class="n">' + esc(it.notes) + "</div>" : "")
-    + (isOpen ? editHtml(it) : "")
-    + "</div>";
+  const key = it.id + (blk ? "@" + blk : ""), isOpen = open === key, done = it.status === "done";
+  const n = days(it.due);
+  const bits = [];
+  if (blk) bits.push("Work · " + extra);
+  else bits.push(fmt(it.due) + (it.time ? " · " + it.time : ""));
+  if (!blk && it.effort && !done) bits.push("~" + hrs(it.effort));
+  let m = bits.map(esc).join(" · ");
+  if (!done && !blk && it.startBy && it.due !== iso(today()) && days(it.startBy) <= 0) m += ' · <span class="now">Start now</span>';
+  if (it._pend) m += ' · <span class="sync">Syncing</span>';
+  let r = "", rc = "";
+  if (blk) r = extra;
+  else if (!done && n !== null) { r = n < 0 ? (-n) + "d late" : n === 0 ? "Today" : n === 1 ? "Tomorrow" : n + " days"; rc = n <= 1 ? "red" : n <= 3 ? "orange" : ""; }
+  else if (done) r = "Done";
+  const dotc = "dot" + (it.kind === "milestone" ? " ms" : "") + (blk ? " blk" : "");
+  let more = "";
+  if (isOpen) {
+    more = '<div class="more">' + '<div class="n">' + esc((CATN[it.category] || "Other") + (blk ? " · due " + fmt(it.due) : "") + (it.notes ? "\n" + it.notes : "")) + "</div>" + editHtml(it) + "</div>";
+  }
+  return '<div class="row' + (done ? " done" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(key) + '">'
+    + '<span class="' + dotc + '"></span><div><div class="t">' + esc(it.title) + '</div><div class="m">' + m + '</div></div><span class="r ' + rc + '">' + esc(r) + "</span>" + more + "</div>";
+}
+
+function group(title, rowsHtml, right){
+  return '<div class="hd"><span>' + esc(title) + '</span>' + (right ? '<span class="x">' + esc(right) + "</span>" : "") + '</div><div class="group">' + rowsHtml + "</div>";
 }
 
 function renderPlan(list, msg){
-  if (!list) { $("plan").innerHTML = '<div class="empty">' + esc(msg) + "</div>"; return; }
+  if (!list) { $("plan").innerHTML = '<div class="hd">Plan</div><div class="group"><div class="empty">' + esc(msg) + "</div></div>"; $("addsec").hidden = true; return; }
   const t = iso(today());
   const open_ = list.filter(i => i.status !== "done");
   const blocks = d => { const out = []; open_.forEach(i => (i.plan || []).forEach(p => { if (p.date === d) out.push([i, p.hours]); })); return out; };
+  const byDue = (a, b) => (a.due || "9") < (b.due || "9") ? -1 : (a.due || "9") > (b.due || "9") ? 1 : (a.priority || 2) - (b.priority || 2);
   let h = "";
 
-  const keys = open_.filter(i => i.kind === "milestone" && i.due && days(i.due) >= 0 && days(i.due) <= 21).sort((a,b) => a.due < b.due ? -1 : 1);
+  const keys = open_.filter(i => i.kind === "milestone" && i.due && days(i.due) >= 0 && days(i.due) <= 21).sort(byDue);
   if (keys.length) {
-    h += "<h2>Key dates</h2><div class='keys'>" + keys.map(k => { const n = days(k.due);
-      return '<div class="key" style="--cat:' + (CAT[k.category] || CAT.other) + '"><span class="pill ' + tone(n) + '">' + esc(left(n)) + '</span><div class="what">' + esc(k.title) + '</div><div class="when">' + esc(fmt(k.due) + (k.time ? " · " + k.time : "")) + "</div></div>"; }).join("") + "</div>";
+    h += group("Key dates", keys.map(k => { const n = days(k.due); const c = n <= 1 ? "red" : n <= 3 ? "orange" : "";
+      const big = n === 0 ? 'Today' : n + "<small>" + (n === 1 ? "day" : "days") + "</small>";
+      return '<div class="key"><div class="big ' + c + '">' + big + '</div><div><div class="t">' + esc(k.title) + '</div><div class="m">' + esc(fmt(k.due) + (k.time ? " · " + k.time : "")) + "</div></div></div>"; }).join(""));
   }
 
-  const overdue = open_.filter(i => i.due && i.due < t && i.kind !== "milestone");
-  if (overdue.length) h += "<h2>Overdue</h2><div class='list'>" + overdue.map(i => rowHtml(i)).join("") + "</div>";
+  const overdue = open_.filter(i => i.due && i.due < t && i.kind !== "milestone").sort(byDue);
+  if (overdue.length) h += group("Overdue", overdue.map(i => rowHtml(i)).join(""));
 
-  const dueToday = open_.filter(i => i.due === t);
+  const dueToday = open_.filter(i => i.due === t).sort(byDue);
   const bToday = blocks(t), total = bToday.reduce((s, b) => s + (+b[1] || 0), 0);
-  h += "<h2>Today" + (total ? " · " + hrs(total) + " planned" : "") + "</h2>";
-  if (!dueToday.length && !bToday.length) h += '<div class="empty">Nothing due or planned today.</div>';
-  else h += "<div class='list'>" + dueToday.map(i => rowHtml(i)).join("") + bToday.map(b => rowHtml(b[0], hrs(b[1]), t)).join("") + "</div>";
+  h += group("Today", (dueToday.length || bToday.length) ? dueToday.map(i => rowHtml(i)).join("") + bToday.map(b => rowHtml(b[0], hrs(b[1]), t)).join("") : '<div class="empty">Nothing due or planned.</div>', total ? hrs(total) + " planned" : "");
 
-  const startNow = open_.filter(i => i.startBy && i.startBy <= t && i.due !== t && !bToday.some(b => b[0].id === i.id) && i.kind !== "milestone").sort((a,b) => (a.due || "9") < (b.due || "9") ? -1 : 1).slice(0, 5);
-  if (startNow.length) h += "<h2>Start now</h2><div class='list'>" + startNow.map(i => rowHtml(i)).join("") + "</div>";
+  const startNow = open_.filter(i => i.startBy && i.startBy <= t && i.due !== t && !bToday.some(b => b[0].id === i.id) && i.kind !== "milestone").sort(byDue).slice(0, 5);
+  if (startNow.length) h += group("Start now", startNow.map(i => rowHtml(i)).join(""));
 
-  h += "<h2>Next 7 days</h2>";
-  let any = false;
   for (let k = 1; k <= 7; k++) {
     const d = new Date(today()); d.setDate(d.getDate() + k); const ds = iso(d);
-    const due = open_.filter(i => i.due === ds), bl = blocks(ds);
+    const due = open_.filter(i => i.due === ds).sort(byDue), bl = blocks(ds);
     if (!due.length && !bl.length) continue;
-    any = true;
     const tot = bl.reduce((s, b) => s + (+b[1] || 0), 0);
-    h += '<div class="day">' + esc(fmt(ds)) + (tot ? ' <span class="muted">· ' + hrs(tot) + " planned</span>" : "") + "</div><div class='list'>"
-      + due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), ds)).join("") + "</div>";
+    h += group(k === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", {weekday:"long", month:"short", day:"numeric"}), due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), ds)).join(""), tot ? hrs(tot) + " planned" : "");
   }
-  if (!any) h += '<div class="empty">Nothing in the next 7 days.</div>';
 
-  const later = open_.filter(i => i.due && days(i.due) > 7).sort((a,b) => a.due < b.due ? -1 : 1);
-  if (later.length) h += "<h2>Later</h2><div class='list'>" + later.map(i => rowHtml(i)).join("") + "</div>";
+  const later = open_.filter(i => i.due && days(i.due) > 7).sort(byDue);
+  if (later.length) h += group("Later", later.map(i => rowHtml(i)).join(""));
   const nodate = open_.filter(i => !i.due);
-  if (nodate.length) h += "<h2>No date</h2><div class='list'>" + nodate.map(i => rowHtml(i)).join("") + "</div>";
+  if (nodate.length) h += group("No date", nodate.map(i => rowHtml(i)).join(""));
   $("plan").innerHTML = h;
+  $("addsec").hidden = !token;
 }
 
 $("plan").addEventListener("click", async e => { if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
@@ -359,10 +379,12 @@ async function renderAlerts(){
   const seen = +(await kvGet("seenAlert") || 0);
   const unseen = list.filter(a => a.id > seen).length;
   $("badge").hidden = !unseen; $("badge").textContent = unseen;
-  $("alert-list").innerHTML = list.length ? list.map(a => '<div class="alert"><div class="at">' + esc(new Date(a.at).toLocaleString("en-US",{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})) + '</div><div class="t">' + esc(a.title) + '</div><div class="b">' + esc(a.body) + "</div></div>").join("")
-    : '<div class="empty">No alerts yet. Morning and evening briefs will show up here.</div>';
+  $("alert-list").innerHTML = list.length ? list.map(a => { const d = new Date(a.at);
+      const when = sod(d).getTime() === today().getTime() ? d.toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit"}) : d.toLocaleDateString("en-US", {month:"short", day:"numeric"}) + ", " + d.toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit"});
+      return '<div class="alert"><div class="h"><b>' + esc(a.title) + '</b><span>' + esc(when) + '</span></div><div class="b">' + esc(a.body) + "</div></div>"; }).join("")
+    : '<div class="empty">No alerts yet. Morning and evening briefs show up here.</div>';
   $("btn-clear").hidden = !list.length;
-  $("btn-clear").textContent = clearArmed ? "Tap again to clear" : "Clear alerts";
+  $("btn-clear").textContent = clearArmed ? "Tap again to clear" : "Clear";
   return list;
 }
 async function markSeen(){ const list = await allAlerts(); const max = list.reduce((m, a) => Math.max(m, a.id), 0); await kvSet("seenAlert", max); renderAlerts(); }
@@ -374,22 +396,21 @@ function renderCal(){
   const first = new Date(calY, calM, 1), dim = new Date(calY, calM + 1, 0).getDate(), lead = first.getDay(), total = Math.ceil((lead + dim) / 7) * 7;
   $("monthname").textContent = first.toLocaleDateString("en-US", {month:"long", year:"numeric"});
   const t = iso(today());
-  let h = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d => '<div class="dow">' + d + "</div>").join("");
+  let h = ["S","M","T","W","T","F","S"].map(d => '<div class="dow">' + d + "</div>").join("");
   for (let k = 0; k < total; k++) {
     const d = new Date(calY, calM, 1 - lead + k), ds = iso(d);
-    const due = items.filter(i => i.due === ds), bl = [];
+    const due = items.filter(i => i.due === ds && i.status !== "done"), bl = [];
     items.forEach(i => { if (i.status !== "done") (i.plan || []).forEach(p => { if (p.date === ds) bl.push(i); }); });
+    const dots = due.slice(0, 3).map(i => '<i style="--cat:' + (CAT[i.category] || CAT.other) + '"></i>').join("") + (due.length < 3 ? bl.slice(0, 3 - due.length).map(i => '<i class="blk" style="--cat:' + (CAT[i.category] || CAT.other) + '"></i>').join("") : "");
     const cls = "cell" + (d.getMonth() !== calM ? " out" : "") + (ds === t ? " today" : "") + (ds === selDay ? " sel" : "");
-    h += '<div class="' + cls + '" data-date="' + ds + '" role="button" tabindex="0" aria-label="' + esc(d.toDateString() + ", " + due.length + " due") + '"><span class="num">' + d.getDate() + "</span>"
-      + ((due.length || bl.length) ? '<div class="dots">' + due.slice(0, 5).map(i => '<span class="dot' + (i.kind === "milestone" ? " ms" : "") + '" style="--cat:' + (CAT[i.category] || CAT.other) + (i.status === "done" ? ";opacity:.4" : "") + '"></span>').join("")
-        + bl.slice(0, 3).map(i => '<span class="dot blk" style="--cat:' + (CAT[i.category] || CAT.other) + '"></span>').join("") + "</div>" : "")
-      + "</div>";
+    h += '<div class="' + cls + '" data-date="' + ds + '" role="button" tabindex="0" aria-label="' + esc(d.toDateString() + ", " + due.length + " due") + '"><span class="num">' + d.getDate() + '</span><span class="dots">' + dots + "</span></div>";
   }
   $("cal").innerHTML = h;
-  const due = items.filter(i => i.due === selDay), bl = [];
+  const due = items.filter(i => i.due === selDay).sort((x, y) => (x.status === "done") - (y.status === "done")), bl = [];
   items.forEach(i => { if (i.status !== "done") (i.plan || []).forEach(p => { if (p.date === selDay) bl.push([i, p.hours]); }); });
   const tot = bl.reduce((s, b) => s + (+b[1] || 0), 0);
-  $("dayhead").textContent = fmt(selDay) + (tot ? " · " + hrs(tot) + " planned" : "");
+  const sd = parse(selDay);
+  $("dayhead").innerHTML = "<span>" + esc(sd.toLocaleDateString("en-US", {weekday:"long", month:"short", day:"numeric"})) + "</span>" + (tot ? '<span class="x">' + esc(hrs(tot)) + " planned</span>" : "");
   $("daylist").innerHTML = (due.length || bl.length) ? due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), selDay)).join("") : '<div class="empty">Nothing due or planned.</div>';
 }
 $("cal").addEventListener("click", e => { const c = e.target.closest(".cell"); if (!c) return; selDay = c.getAttribute("data-date"); open = null; renderCal(); });
@@ -398,7 +419,7 @@ $("prevm").addEventListener("click", () => { calM--; if (calM < 0) { calM = 11; 
 $("nextm").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
 $("todaybtn").addEventListener("click", () => { calY = today().getFullYear(); calM = today().getMonth(); selDay = iso(today()); renderCal(); });
 function setTab(t){
-  $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts"; $("calsec").hidden = t !== "cal";
+  $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts"; $("calsec").hidden = t !== "cal"; $("addsec").hidden = t !== "plan" || !token;
   $("tab-plan").setAttribute("aria-pressed", t === "plan"); $("tab-alerts").setAttribute("aria-pressed", t === "alerts"); $("tab-cal").setAttribute("aria-pressed", t === "cal");
   if (t === "alerts") markSeen();
 }
@@ -413,7 +434,7 @@ async function checkEnable(){
   if (isIOS && !standalone) { $("install").hidden = false; return; }
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
   const r = await getReg(); const s = await r.pushManager.getSubscription();
-  if (!s || Notification.permission !== "granted") $("enable").hidden = false;
+  if (!s || Notification.permission !== "granted") { $("settings").hidden = false; $("enable-status").textContent = "Turn on notifications so morning and evening briefs reach this phone."; }
 }
 $("btn-enable").addEventListener("click", async () => {
   try {
@@ -426,7 +447,7 @@ $("btn-enable").addEventListener("click", async () => {
   } catch (e) { $("enable-status").textContent = "Couldn't turn on notifications: " + (e && e.message ? e.message : e); }
 });
 $("btn-copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("code").value); $("btn-copy").textContent = "Copied"; } catch (e) { $("code").select(); $("btn-copy").textContent = "Selected. Long-press to copy"; } });
-$("btn-relink").addEventListener("click", () => { const show = $("settings").hidden; $("settings").hidden = !show; $("enable").hidden = !show; });
+$("btn-relink").addEventListener("click", () => { $("settings").hidden = !$("settings").hidden; if (!$("settings").hidden) $("settings").scrollIntoView({behavior:"smooth"}); });
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.addEventListener("message", e => {
   if (!e.data) return;
