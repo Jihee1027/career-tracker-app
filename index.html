@@ -28,7 +28,7 @@ body{font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 .head .sub{font-size:12.5px;color:var(--muted)}
 .head .grow{flex:1;min-width:0}
 .edit{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--surface)}
-.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
 .tabs button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:8px;background:transparent;color:var(--muted);cursor:pointer}
 .tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:99px;background:var(--hot);color:#fff;font-size:11px;line-height:18px}
@@ -59,6 +59,23 @@ button.ghost{background:transparent;color:var(--muted);border:1px solid var(--li
 textarea{width:100%;min-height:90px;font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
 ol{margin:0;padding-left:20px;color:var(--muted)}
 .empty{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--muted);font-size:14px}
+.calhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px}
+.calhead .mo{font-weight:700;font-size:17px}
+.calhead button{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;width:36px;height:34px;cursor:pointer}
+.calhead .today-btn{width:auto;padding:0 10px;font-size:13px;font-weight:600;color:var(--accent)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.dow{background:var(--surface);font-size:10.5px;color:var(--muted);text-align:center;padding:5px 0;text-transform:uppercase;letter-spacing:.05em}
+.cell{background:var(--surface);min-height:58px;padding:4px;display:flex;flex-direction:column;gap:3px;cursor:pointer;min-width:0}
+.cell.out{background:var(--bg)}.cell.out .num{color:var(--muted)}
+.cell .num{font-size:12px;width:22px;height:22px;display:grid;place-items:center;border-radius:50%}
+.cell.today .num{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.cell.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+.dots{display:flex;flex-wrap:wrap;gap:3px;padding-left:2px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--cat)}
+.dot.ms{width:9px;height:9px;border-radius:2px}
+.dot.blk{background:transparent;border:1.5px solid var(--cat)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted);margin-top:8px}
+.legend .k::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--cat);margin-right:5px}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -87,10 +104,19 @@ ol{margin:0;padding-left:20px;color:var(--muted)}
 
   <div class="tabs" role="group" aria-label="View">
     <button type="button" id="tab-plan" aria-pressed="true">Plan</button>
+    <button type="button" id="tab-cal" aria-pressed="false">Calendar</button>
     <button type="button" id="tab-alerts" aria-pressed="false">Alerts<span class="badge" id="badge" hidden></span></button>
   </div>
 
   <section id="plan"></section>
+
+  <section id="calsec" hidden>
+    <div class="calhead"><button type="button" id="prevm" aria-label="Previous month">&#8249;</button><span class="mo" id="monthname"></span><button type="button" id="nextm" aria-label="Next month">&#8250;</button><button type="button" class="today-btn" id="todaybtn">Today</button></div>
+    <div class="cal" id="cal"></div>
+    <div class="legend"><span class="k" style="--cat:var(--c-interview)">Interview</span><span class="k" style="--cat:var(--c-offer)">Offer</span><span class="k" style="--cat:var(--c-school)">School</span><span class="k" style="--cat:var(--c-admin)">Admin</span><span>&#9632; key date · &#9675; planned work</span></div>
+    <h2 id="dayhead"></h2>
+    <div class="list" id="daylist"></div>
+  </section>
 
   <section id="alerts" hidden>
     <div class="list" id="alert-list"></div>
@@ -145,7 +171,7 @@ async function loadData(){
     items = data.items || [];
     const u = new Date(data.updatedAt);
     $("updated").textContent = "Updated " + u.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
-    renderPlan(items);
+    renderPlan(items); renderCal();
   } catch (e) {
     $("updated").textContent = "Couldn't load your plan";
     renderPlan(null, "Couldn't load the latest plan. Pull to refresh or try again later.");
@@ -230,13 +256,42 @@ async function markSeen(){ const list = await allAlerts(); const max = list.redu
 $("btn-clear").addEventListener("click", async () => { if (!clearArmed) { clearArmed = true; renderAlerts(); return; } clearArmed = false; await clearAlerts(); renderAlerts(); });
 
 /* tabs */
+let calY = today().getFullYear(), calM = today().getMonth(), selDay = iso(today());
+function renderCal(){
+  const first = new Date(calY, calM, 1), dim = new Date(calY, calM + 1, 0).getDate(), lead = first.getDay(), total = Math.ceil((lead + dim) / 7) * 7;
+  $("monthname").textContent = first.toLocaleDateString("en-US", {month:"long", year:"numeric"});
+  const t = iso(today());
+  let h = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d => '<div class="dow">' + d + "</div>").join("");
+  for (let k = 0; k < total; k++) {
+    const d = new Date(calY, calM, 1 - lead + k), ds = iso(d);
+    const due = items.filter(i => i.due === ds), bl = [];
+    items.forEach(i => { if (i.status !== "done") (i.plan || []).forEach(p => { if (p.date === ds) bl.push(i); }); });
+    const cls = "cell" + (d.getMonth() !== calM ? " out" : "") + (ds === t ? " today" : "") + (ds === selDay ? " sel" : "");
+    h += '<div class="' + cls + '" data-date="' + ds + '" role="button" tabindex="0" aria-label="' + esc(d.toDateString() + ", " + due.length + " due") + '"><span class="num">' + d.getDate() + "</span>"
+      + ((due.length || bl.length) ? '<div class="dots">' + due.slice(0, 5).map(i => '<span class="dot' + (i.kind === "milestone" ? " ms" : "") + '" style="--cat:' + (CAT[i.category] || CAT.other) + (i.status === "done" ? ";opacity:.4" : "") + '"></span>').join("")
+        + bl.slice(0, 3).map(i => '<span class="dot blk" style="--cat:' + (CAT[i.category] || CAT.other) + '"></span>').join("") + "</div>" : "")
+      + "</div>";
+  }
+  $("cal").innerHTML = h;
+  const due = items.filter(i => i.due === selDay), bl = [];
+  items.forEach(i => { if (i.status !== "done") (i.plan || []).forEach(p => { if (p.date === selDay) bl.push([i, p.hours]); }); });
+  const tot = bl.reduce((s, b) => s + (+b[1] || 0), 0);
+  $("dayhead").textContent = fmt(selDay) + (tot ? " · " + hrs(tot) + " planned" : "");
+  $("daylist").innerHTML = (due.length || bl.length) ? due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), selDay)).join("") : '<div class="empty">Nothing due or planned.</div>';
+}
+$("cal").addEventListener("click", e => { const c = e.target.closest(".cell"); if (!c) return; selDay = c.getAttribute("data-date"); open = null; renderCal(); });
+$("daylist").addEventListener("click", e => { const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderCal(); });
+$("prevm").addEventListener("click", () => { calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); });
+$("nextm").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
+$("todaybtn").addEventListener("click", () => { calY = today().getFullYear(); calM = today().getMonth(); selDay = iso(today()); renderCal(); });
 function setTab(t){
-  $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts";
-  $("tab-plan").setAttribute("aria-pressed", t === "plan"); $("tab-alerts").setAttribute("aria-pressed", t === "alerts");
+  $("plan").hidden = t !== "plan"; $("alerts").hidden = t !== "alerts"; $("calsec").hidden = t !== "cal";
+  $("tab-plan").setAttribute("aria-pressed", t === "plan"); $("tab-alerts").setAttribute("aria-pressed", t === "alerts"); $("tab-cal").setAttribute("aria-pressed", t === "cal");
   if (t === "alerts") markSeen();
 }
 $("tab-plan").addEventListener("click", () => setTab("plan"));
 $("tab-alerts").addEventListener("click", () => setTab("alerts"));
+$("tab-cal").addEventListener("click", () => setTab("cal"));
 
 /* notifications */
 function u8(s){ return b64(s); }
