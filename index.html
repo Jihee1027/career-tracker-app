@@ -143,6 +143,60 @@ section{animation:fade .18s ease-out}
 .hero .stats span{background:rgba(255,255,255,.16);border-radius:99px;padding:5px 11px;font-size:13px;font-weight:600}
 .hero .stats span.warn{background:var(--coral)}
 .hero .ttl,.hero .when{padding-right:86px}
+.t{font-size:16.5px;font-weight:600}
+.m{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.keys{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 6px;margin:0 -2px;scrollbar-width:none}
+.keys::-webkit-scrollbar{display:none}
+.ktile{flex:0 0 148px;scroll-snap-align:start;border-radius:18px;padding:13px 14px;background:color-mix(in srgb,var(--cat) 16%,var(--group));display:flex;flex-direction:column;gap:6px;min-height:150px;position:relative}
+.ktile .n{font-family:var(--display);font-size:40px;font-weight:800;line-height:.95;color:var(--cat);letter-spacing:-.03em}
+.ktile .n small{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;font-weight:600;letter-spacing:0;margin-left:3px;color:var(--cat)}
+.ktile .k{font-size:15px;font-weight:700;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ktile .d{font-size:12.5px;color:var(--sub);margin-top:auto;font-weight:500}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;background:var(--group);border-radius:18px;padding:12px 10px 10px}
+.wd{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;border-radius:12px;padding:4px 0}
+.wd .l{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase}
+.wd .dn{font-family:var(--display);font-size:17px;font-weight:800}
+.wd.today .dn{color:var(--coral)}
+.wd .bar{width:62%;height:64px;border-radius:8px;background:var(--fill);position:relative;overflow:hidden}
+.wd .bar i{position:absolute;left:0;right:0;bottom:0;border-radius:8px;background:linear-gradient(180deg,var(--hero1),var(--hero2))}
+.wd.today .bar i{background:linear-gradient(180deg,var(--coral),#D9442B)}
+.wd .h{font-size:11.5px;font-weight:700;color:var(--sub);font-variant-numeric:tabular-nums}
+.wd .c{display:flex;gap:2px;height:5px}
+.wd .c b{width:5px;height:5px;border-radius:50%;background:var(--cat)}
+.tiles{display:flex;flex-direction:column;gap:8px}
+.tile{border-radius:16px;padding:13px 14px;background:color-mix(in srgb,var(--cat) 13%,var(--group));display:grid;grid-template-columns:26px minmax(0,1fr) auto;column-gap:12px;align-items:center;cursor:pointer}
+.tile .ring{width:24px;height:24px}
+.tile .tt{font-size:17px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.tile .ts{font-size:13.5px;color:var(--sub);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .tr{font-family:var(--display);font-size:20px;font-weight:800;color:var(--cat);white-space:nowrap}
+.tile .tr small{font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:11px;font-weight:600;display:block;text-align:right;color:var(--sub)}
+.tile.done .tt{text-decoration:line-through;color:var(--sub)}
+.tile.done .ring{background:var(--cat);color:#fff}
+.tile .more{grid-column:2 / -1}
+.tile:active{filter:brightness(.97)}
+.tile::before,.tiles .row::before{display:none!important}
+.tile{padding:13px 14px;position:relative}
+.ask{display:flex;flex-direction:column;gap:6px}
+.ask .q{background:var(--group);border-radius:14px;padding:10px 14px;font-size:14.5px;display:flex;gap:10px;align-items:flex-start}
+.ask .q span{color:var(--sub);font-size:12.5px;white-space:nowrap}
+details.later summary{list-style:none;cursor:pointer}
+details.later summary::-webkit-details-marker{display:none}
+.fab{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:calc(76px + env(safe-area-inset-bottom));z-index:9;width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;
+ background:linear-gradient(145deg,var(--coral),#D9442B);color:#fff;box-shadow:0 10px 24px rgba(217,68,43,.4);display:grid;place-items:center}
+.fab svg{width:26px;height:26px}
+.sheet-bg{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.4);display:flex;align-items:flex-end}
+.sheet{width:100%;max-width:600px;margin:0 auto;background:var(--bg);border-radius:22px 22px 0 0;padding:16px max(16px,env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:12px;animation:up .2s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
+.sheet h3{margin:0;font-family:var(--display);font-size:22px;font-weight:800}
+.sheet .note{font-size:14px;color:var(--sub)}
+.sheet textarea{font:inherit;font-size:17px;border:0;border-radius:14px;background:var(--group);color:var(--ink);padding:14px;min-height:110px;resize:none}
+.sheet .row2{display:flex;gap:10px;align-items:center}
+.mic{width:56px;height:56px;border-radius:50%;border:0;background:var(--group);color:var(--coral);display:grid;place-items:center;cursor:pointer;flex:none}
+.mic.on{background:var(--coral);color:#fff;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,107,58,.5)}70%{box-shadow:0 0 0 14px rgba(242,107,58,0)}100%{box-shadow:0 0 0 0 rgba(242,107,58,0)}}
+.mic svg{width:24px;height:24px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{font:inherit;font-size:13px;border:0;border-radius:99px;padding:6px 11px;background:var(--fill);color:var(--ink);cursor:pointer}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -212,6 +266,20 @@ section{animation:fade .18s ease-out}
 
   <div class="toast" id="toast" hidden></div>
 </div>
+<button class="fab" id="fab" type="button" aria-label="Tell Claude" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></button>
+<div class="sheet-bg" id="sheet" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <h3 id="sheet-title">Tell Claude</h3>
+    <div class="note" id="sheet-note">Say what changed. Claude adds it to your tracker at the next sync.</div>
+    <textarea id="say" placeholder="e.g. Add EEE 355 quiz Friday 11:59 PM, and move the poster to Saturday" aria-label="Request for Claude"></textarea>
+    <div class="chips"><button type="button" data-chip="Add a task: ">Add a task</button><button type="button" data-chip="Move ">Move something</button><button type="button" data-chip="I finished ">I finished…</button><button type="button" data-chip="Plan my week around ">Plan around…</button></div>
+    <div class="row2">
+      <button class="mic" id="mic" type="button" aria-label="Dictate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></button>
+      <button class="btn" id="say-send" type="button">Send to Claude</button>
+    </div>
+    <button class="btn plain" id="say-cancel" type="button">Cancel</button>
+  </div>
+</div>
 <nav class="tabbar" aria-label="View">
   <button type="button" id="tab-plan" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="5" cy="17.5" r="1.3" fill="currentColor" stroke="none"/><path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/></svg>Plan</button>
   <button type="button" id="tab-cal" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><circle cx="8.5" cy="14" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1.1" fill="currentColor" stroke="none"/></svg>Calendar</button>
@@ -226,7 +294,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const standalone = navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
 const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-let reg = null, items = [], open = null, snap = null, token = null;
+let reg = null, items = [], open = null, snap = null, token = null, pendingSays = [];
 const REPO = "Jihee1027/career-tracker-push";
 
 /* dates */
@@ -258,7 +326,9 @@ async function merged(){
   let pend = await getPending();
   const keep = pend.filter(e => !e.sent || Date.parse(e.at) > since);
   if (keep.length !== pend.length) { await kvSet("pending", keep); }
+  pendingSays = keep.filter(e => e.op === "say");
   keep.forEach(e => {
+    if (e.op === "say") return;
     if (e.op === "add") base.push(Object.assign({id: e.id, status: "todo", kind: "task", _pend: true}, e.fields));
     else { const it = base.find(i => i.id === e.id); if (it) { Object.assign(it, e.fields); it._pend = true; } }
   });
@@ -309,6 +379,7 @@ async function onEdit(e){
 }
 async function loadToken(){
   token = await kvGet("ghToken").catch(() => null);
+  $("fab").hidden = !token;
   $("addsec").hidden = !token || $("plan").hidden;
   $("tok-remove").hidden = !token;
   $("tok-status").textContent = token ? "Editing is on. Edits sync to the tracker within a few hours." : "Paste your GitHub token to edit from the app. Edits sync to the tracker within a few hours.";
@@ -326,6 +397,34 @@ $("addcard").addEventListener("submit", async ev => {
   ev.preventDefault(); const title = $("add-title").value.trim(); if (!title) return;
   await edit("add", null, {title, category: $("add-cat").value, due: $("add-due").value || "", createdAt: new Date().toISOString()});
   $("add-title").value = ""; $("add-due").value = ""; $("addcard").hidden = true; $("btn-add").hidden = false;
+});
+
+/* tell claude */
+let rec = null;
+function openSheet(){ $("sheet").hidden = false; setTimeout(() => $("say").focus(), 50); }
+function closeSheet(){ if (rec) { try { rec.stop(); } catch (_) {} } $("sheet").hidden = true; }
+$("fab").addEventListener("click", openSheet);
+$("say-cancel").addEventListener("click", closeSheet);
+$("sheet").addEventListener("click", e => { if (e.target.id === "sheet") closeSheet(); });
+document.querySelectorAll("[data-chip]").forEach(b => b.addEventListener("click", () => { const t = $("say"); t.value = (t.value ? t.value + " " : "") + b.dataset.chip; t.focus(); }));
+$("mic").addEventListener("click", () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { $("say").focus(); $("sheet-note").textContent = "Tap the microphone on your keyboard to dictate, then Send."; return; }
+  if (rec) { try { rec.stop(); } catch (_) {} return; }
+  rec = new SR(); rec.lang = "en-US"; rec.interimResults = true; rec.continuous = false;
+  const base = $("say").value ? $("say").value + " " : "";
+  rec.onresult = ev => { let txt = ""; for (const r of ev.results) txt += r[0].transcript; $("say").value = base + txt; };
+  rec.onend = () => { rec = null; $("mic").classList.remove("on"); };
+  rec.onerror = () => { rec = null; $("mic").classList.remove("on"); $("sheet-note").textContent = "Couldn't use the mic here. Tap the microphone on your keyboard instead."; };
+  $("mic").classList.add("on"); rec.start();
+});
+$("say-send").addEventListener("click", async () => {
+  const text = $("say").value.trim(); if (!text) return;
+  if (!token) { toast("Turn on editing in Settings first."); return; }
+  await edit("say", null, {text});
+  $("say").value = ""; closeSheet();
+  const hr = new Date().getHours(); const next = [10,12,14,16,18,20,22].find(x => x > hr);
+  toast("Sent. Claude adds it " + (next ? "by " + ((next % 12) || 12) + ":13 " + (next < 12 ? "AM" : "PM") : "in the morning brief") + ".");
 });
 
 /* data */
@@ -389,6 +488,24 @@ function group(title, rowsHtml, right){
   return '<div class="hd"><span>' + esc(title) + '</span>' + (right ? '<span class="x">' + esc(right) + "</span>" : "") + '</div><div class="group">' + rowsHtml + "</div>";
 }
 
+function tileHtml(it, extra, blk){
+  const key = it.id + (blk ? "@" + blk : ""), isOpen = open === key, done = it.status === "done";
+  const n = days(it.due);
+  let sub = blk ? "Work block · due " + fmt(it.due) : (it.time ? it.time : fmt(it.due));
+  if (!blk && it.effort && !done) sub += " · ~" + hrs(it.effort);
+  let right = "";
+  if (blk) right = esc(extra) + "<small>planned</small>";
+  else if (done) right = "<small>done</small>";
+  else if (n !== null) right = (n <= 0 ? (n < 0 ? (-n) + "d" : "Today") : n === 1 ? "1d" : n + "d") + "<small>" + (n < 0 ? "late" : n === 0 ? "due" : "left") + "</small>";
+  const check = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.3 2.3L9.6 3.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  let more = "";
+  if (isOpen) more = '<div class="more"><div class="catl">' + esc(CATN[it.category] || "Other") + "</div>" + notesHtml(it.notes) + editHtml(it) + "</div>";
+  return '<div class="tile row' + (done ? " done" : "") + '" style="--cat:' + (CAT[it.category] || CAT.other) + '" data-key="' + esc(key) + '">'
+    + '<button type="button" class="ring' + (it.kind === "milestone" ? " ms" : "") + (blk ? " blk" : "") + '" data-ring="' + esc(it.id) + '" aria-label="' + esc((done ? "Reopen " : "Complete ") + it.title) + '">' + check + "</button>"
+    + '<div><div class="tt">' + esc(it.title) + '</div><div class="ts">' + esc(sub) + (it._pend ? ' · <span class="sync">Syncing</span>' : "") + "</div></div>"
+    + '<div class="tr">' + right + "</div>" + more + "</div>";
+}
+
 function renderPlan(list, msg){
   if (!list) { $("plan").innerHTML = '<div class="hd">Plan</div><div class="group"><div class="empty">' + esc(msg) + "</div></div>"; $("addsec").hidden = true; return; }
   const t = iso(today());
@@ -397,40 +514,44 @@ function renderPlan(list, msg){
   const byDue = (a, b) => (a.due || "9") < (b.due || "9") ? -1 : (a.due || "9") > (b.due || "9") ? 1 : (a.priority || 2) - (b.priority || 2);
   let h = "";
 
-  const keys = open_.filter(i => i.kind === "milestone" && i.due && days(i.due) >= 0 && days(i.due) <= 21).sort(byDue);
-  let heroId = null;
-  {
-    const soonMs = keys.filter(k => days(k.due) <= 2);
-    const nextTask = open_.filter(i => i.due && i.due >= t).sort(byDue)[0];
-    const nx = soonMs[0] || nextTask;
-    const nDue0 = open_.filter(i => i.due === t).length;
-    const bt = blocks(t).reduce((s, b) => s + (+b[1] || 0), 0);
-    const od = open_.filter(i => i.due && i.due < t && i.kind !== "milestone").length;
-    if (nx) {
-      heroId = nx.id;
-      const n = days(nx.due);
-      h += '<div class="hero"><div class="lbl">Next up</div><div class="ttl">' + esc(nx.title) + '</div><div class="when">' + esc((n === 0 ? "Today" : n === 1 ? "Tomorrow" : fmt(nx.due)) + (nx.time ? " · " + nx.time : "")) + '</div>'
-        + '<div class="cd"><b>' + (n === 0 ? "0" : esc(n)) + '</b><span>' + (n === 0 ? "today" : n === 1 ? "day left" : "days left") + "</span></div>"
-        + '<div class="stats"><span>' + nDue0 + " due today</span>" + (bt ? "<span>" + esc(hrs(bt)) + " planned</span>" : "") + (od ? '<span class="warn">' + od + " overdue</span>" : "") + "</div></div>";
-    }
-  }
-  if (keys.length) {
-    const kk = keys.filter(k => k.id !== heroId);
-    if (kk.length) h += group("Key dates", kk.slice(0, 4).map(k => { const n = days(k.due); const c = n <= 1 ? "red" : n <= 3 ? "orange" : "";
-      const big = n === 0 ? 'Today' : n + "<small>" + (n === 1 ? "day" : "days") + "</small>";
-      return '<div class="key"><div class="big ' + c + '">' + big + '</div><div><div class="t">' + esc(k.title) + '</div><div class="m">' + esc(fmt(k.due) + (k.time ? " · " + k.time : "")) + "</div></div></div>"; }).join(""));
-  }
-
-  const overdue = open_.filter(i => i.due && i.due < t && i.kind !== "milestone").sort(byDue);
-  if (overdue.length) h += group("Overdue", overdue.map(i => rowHtml(i)).join(""));
-
+  /* hero */
+  const keys = open_.filter(i => i.kind === "milestone" && i.due && days(i.due) >= 0 && days(i.due) <= 30).sort(byDue);
   const dueToday = open_.filter(i => i.due === t).sort(byDue);
   const bToday = blocks(t), total = bToday.reduce((s, b) => s + (+b[1] || 0), 0);
-  h += group("Today", (dueToday.length || bToday.length) ? dueToday.map(i => rowHtml(i)).join("") + bToday.map(b => rowHtml(b[0], hrs(b[1]), t)).join("") : '<div class="empty">Nothing due or planned.</div>', total ? hrs(total) + " planned" : "");
+  const overdue = open_.filter(i => i.due && i.due < t && i.kind !== "milestone").sort(byDue);
+  let heroId = null;
+  const nx = keys.filter(k => days(k.due) <= 2)[0] || open_.filter(i => i.due && i.due >= t).sort(byDue)[0];
+  if (nx) {
+    heroId = nx.id; const n = days(nx.due);
+    h += '<div class="hero"><div class="lbl">Next up</div><div class="ttl">' + esc(nx.title) + '</div><div class="when">' + esc((n === 0 ? "Today" : n === 1 ? "Tomorrow" : fmt(nx.due)) + (nx.time ? " · " + nx.time : "")) + '</div>'
+      + '<div class="cd"><b>' + esc(n) + '</b><span>' + (n === 0 ? "today" : n === 1 ? "day left" : "days left") + "</span></div>"
+      + '<div class="stats"><span>' + dueToday.length + " due today</span>" + (total ? "<span>" + esc(hrs(total)) + " planned</span>" : "") + (overdue.length ? '<span class="warn">' + overdue.length + " overdue</span>" : "") + "</div></div>";
+  }
 
-  const startNow = open_.filter(i => i.startBy && i.startBy <= t && i.due !== t && !bToday.some(b => b[0].id === i.id) && i.kind !== "milestone").sort(byDue).slice(0, 5);
-  if (startNow.length) h += group("Start now", startNow.map(i => rowHtml(i)).join(""));
+  /* waiting for Claude */
+  if (pendingSays.length) h += '<div class="hd">Waiting for Claude<span class="x">next sync</span></div><div class="ask">' + pendingSays.map(e => '<div class="q"><div>' + esc(e.fields.text) + "</div><span>" + esc(new Date(e.at).toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit"})) + "</span></div>").join("") + "</div>";
 
+  /* this week strip */
+  let wk = "", maxH = 1;
+  const wdays = [];
+  for (let k = 0; k < 7; k++) { const d = new Date(today()); d.setDate(d.getDate() + k); const ds = iso(d); const bl = blocks(ds); const hh = bl.reduce((s, b) => s + (+b[1] || 0), 0); const du = open_.filter(i => i.due === ds); wdays.push([d, ds, hh, du]); maxH = Math.max(maxH, hh); }
+  wk = wdays.map(([d, ds, hh, du]) => '<div class="wd' + (ds === t ? " today" : "") + '" data-day="' + ds + '"><span class="l">' + d.toLocaleDateString("en-US", {weekday:"short"}).slice(0, 2) + '</span><span class="dn">' + d.getDate() + '</span><div class="bar"><i style="height:' + Math.round(hh / Math.max(maxH, 6) * 100) + '%"></i></div><span class="h">' + (hh ? esc(hrs(hh)) : "–") + '</span><span class="c">' + du.slice(0, 4).map(i => '<b style="--cat:' + (CAT[i.category] || CAT.other) + '"></b>').join("") + "</span></div>").join("");
+  h += '<div class="hd">This week<span class="x">hours of planned work</span></div><div class="week">' + wk + "</div>";
+
+  /* key dates tiles */
+  const kk = keys.filter(k => k.id !== heroId);
+  if (kk.length) h += '<div class="hd">Key dates</div><div class="keys">' + kk.slice(0, 8).map(k => { const n = days(k.due);
+    return '<div class="ktile" style="--cat:' + (CAT[k.category] || CAT.other) + '"><div class="n">' + (n === 0 ? "Today" : esc(n) + "<small>" + (n === 1 ? "day" : "days") + "</small>") + '</div><div class="k">' + esc(k.title) + '</div><div class="d">' + esc(fmt(k.due) + (k.time ? " · " + k.time.split(/[,(]/)[0].trim() : "")) + "</div></div>"; }).join("") + "</div>";
+
+  /* overdue + today as tiles */
+  if (overdue.length) h += '<div class="hd">Overdue</div><div class="tiles">' + overdue.map(i => tileHtml(i)).join("") + "</div>";
+  h += '<div class="hd">Today' + (total ? '<span class="x">' + esc(hrs(total)) + " planned</span>" : "") + "</div>";
+  h += (dueToday.length || bToday.length) ? '<div class="tiles">' + dueToday.map(i => tileHtml(i)).join("") + bToday.map(b => tileHtml(b[0], hrs(b[1]), t)).join("") + "</div>" : '<div class="group"><div class="empty">Nothing due or planned today.</div></div>';
+
+  const startNow = open_.filter(i => i.startBy && i.startBy <= t && i.due !== t && !bToday.some(b => b[0].id === i.id) && i.kind !== "milestone").sort(byDue).slice(0, 4);
+  if (startNow.length) h += group("Start soon", startNow.map(i => rowHtml(i)).join(""));
+
+  /* upcoming 7 days as rows */
   for (let k = 1; k <= 7; k++) {
     const d = new Date(today()); d.setDate(d.getDate() + k); const ds = iso(d);
     const due = open_.filter(i => i.due === ds).sort(byDue), bl = blocks(ds);
@@ -438,26 +559,16 @@ function renderPlan(list, msg){
     const tot = bl.reduce((s, b) => s + (+b[1] || 0), 0);
     h += group(k === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", {weekday:"long", month:"short", day:"numeric"}), due.map(i => rowHtml(i)).join("") + bl.map(b => rowHtml(b[0], hrs(b[1]), ds)).join(""), tot ? hrs(tot) + " planned" : "");
   }
-
   const later = open_.filter(i => i.due && days(i.due) > 7).sort(byDue);
-  if (later.length) h += group("Later", later.map(i => rowHtml(i)).join(""));
   const nodate = open_.filter(i => !i.due);
-  if (nodate.length) h += group("No date", nodate.map(i => rowHtml(i)).join(""));
+  if (later.length || nodate.length) h += '<details class="later"><summary class="hd">Later & no date<span class="x">' + (later.length + nodate.length) + " items ›</span></summary>"
+    + (later.length ? '<div class="group">' + later.map(i => rowHtml(i)).join("") + "</div>" : "") + (nodate.length ? '<div class="hd" style="font-size:15px">No date</div><div class="group">' + nodate.map(i => rowHtml(i)).join("") + "</div>" : "") + "</details>";
   $("plan").innerHTML = h;
   $("addsec").hidden = !token || $("plan").hidden;
-  const nDue = dueToday.length;
-  $("sumline").innerHTML = "<b>" + nDue + "</b> due today" + (total ? " · <b>" + esc(hrs(total)) + "</b> planned" : "") + (overdue.length ? ' · <span style="color:var(--red)"><b>' + overdue.length + "</b> overdue</span>" : "");
 }
 
-async function onRing(e){
-  const r = e.target.closest("[data-ring]"); if (!r) return false;
-  e.stopPropagation();
-  if (!token) { toast("Turn on editing in Settings to check items off here."); return true; }
-  const it = items.find(i => i.id === r.dataset.ring); if (!it) return true;
-  await edit("update", it.id, it.status === "done" ? {status: "todo"} : {status: "done", doneAt: new Date().toISOString()});
-  return true;
-}
-$("plan").addEventListener("click", async e => { if (await onRing(e)) return; if (await onEdit(e)) return; const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
+$("plan").addEventListener("click", async e => { if (await onRing(e)) return; if (await onEdit(e)) return;
+  const wd = e.target.closest(".wd"); if (wd) { selDay = wd.dataset.day; const d = parse(selDay); calY = d.getFullYear(); calM = d.getMonth(); setTab("cal"); renderCal(); return; } const r = e.target.closest(".row"); if (!r) return; const k = r.getAttribute("data-key"); open = open === k ? null : k; renderPlan(items); });
 
 /* alerts */
 let clearArmed = false;
