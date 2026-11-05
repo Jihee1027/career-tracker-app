@@ -31,6 +31,12 @@ async function trimAlerts(max) {
   });
 }
 self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("fetch", e => {
+  const req = e.request;
+  if (req.mode === "navigate" || (req.method === "GET" && new URL(req.url).pathname.endsWith("/index.html"))) {
+    e.respondWith(fetch(req, { cache: "no-store" }).catch(() => fetch(req)));
+  }
+});
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 self.addEventListener("push", e => {
   let d = {};
